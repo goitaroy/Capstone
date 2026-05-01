@@ -1,0 +1,252 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming Course</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f8ff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  h1 { color: #005f73; }
+
+  /* Tab Button Styling */
+  .tab-container {
+    margin-bottom: 30px;
+  }
+
+  .tab-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    margin: 5px;
+    transition: 0.3s;
+    background: #94d2bd;
+    color: #005f73;
+  }
+
+  .tab-btn.active {
+    background: #0a9396;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  /* Content Section */
+  .course-section {
+    display: none; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .course-section.active {
+    display: grid; 
+  }
+
+  .card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    text-align: left; /* লেখা বাম দিক থেকে শুরু হবে */
+  }
+
+  .card:hover { transform: translateY(-5px); }
+
+  .card h3 { margin: 0 0 10px 0; color: #333; }
+
+  .card p { font-size: 14px; color: #666; margin-bottom: 15px; height: 40px; }
+
+  a {
+    text-decoration: none;
+    color: white;
+    background: #0a9396;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 80%;
+  }
+
+  a:hover { background: #005f73; }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h1>🎓 Programming Learning Portal</h1>
+  <p>আপনার পছন্দের লেভেলটি সিলেক্ট করুন</p>
+
+  <div class="tab-container">
+    <button class="tab-btn active" onclick="openLevel(event, 'beginner')">Beginner Level</button>
+    <button class="tab-btn" onclick="openLevel(event, 'intermediate')">Intermediate Level</button>
+  </div>
+
+  <div id="beginner" class="course-section active">
+    <div class="card">
+      <h3>Class 01</h3>
+      <p>Computer Introduction</p>
+      <a href="class1.html">Start</a> 
+    </div>
+    <div class="card">
+      <h3>Class 02</h3>
+      <p>Hardware & Software</p>
+      <a href="class2.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 03</h3>
+      <p>Input & Output</p>
+      <a href="class3.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 04</h3>
+      <p>Inside the CPU</p>
+      <a href="class4.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 05</h3>
+      <p>Memory & Storage</p>
+      <a href="class5.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 06</h3>
+      <p>Operating System</p>
+      <a href="class6.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 07</h3>
+      <p>Internet Basics</p>
+      <a href="class7.html">Start</a>
+    </div>
+    <div class="card">
+      <h3>Class 08</h3>
+      <p>Cyber Safety</p>
+      <a href="class8.html">Start</a>
+    </div>
+  </div>
+
+  <div id="intermediate" class="course-section">
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 01</h3>
+      <p>Algorithm (অ্যালগরিদম)</p>
+      <a href="i_class1.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 02</h3>
+      <p>Flowchart (ফ্লোচার্ট)</p>
+      <a href="i_class2.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 03</h3>
+      <p>Events (ইভেন্টস)</p>
+      <a href="i_class3.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 04</h3>
+      <p>Programming Basics</p>
+      <a href="i_class4.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 05</h3>
+      <p>Loops (লুপ)</p>
+      <a href="i_class5.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 06</h3>
+      <p>Variables (ভ্যারিয়েবল)</p>
+      <a href="i_class6.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 07</h3>
+      <p>If-Else (সিদ্ধান্ত গ্রহণ)</p>
+      <a href="i_class7.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 08</h3>
+      <p>Operators (অংক ও তুলনা)</p>
+      <a href="i_class8.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 09</h3>
+      <p>Sensing (অনুভূতি ও টাচ)</p>
+      <a href="i_class9.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 10</h3>
+      <p>Background & Sound</p>
+      <a href="i_class10.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 11</h3>
+      <p>Mini Project (গেম তৈরি)</p>
+      <a href="i_class11.html">Start</a>
+    </div>
+    <div class="card" style="border-left: 5px solid #ff9800;">
+      <h3>Class 12</h3>
+      <p>Transition to Python</p>
+      <a href="i_class12.html">Start</a>
+    </div>
+  </div>
+  <div class="container" style="margin-top: 50px;">
+    <h2>🏆 Top Coders (লিডারবোর্ড)</h2>
+    <table style="width: 100%; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <tr style="background: #005f73; color: white;">
+            <th style="padding: 15px;">Rank</th>
+            <th>Name</th>
+            <th>Level</th>
+            <th>Score</th>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">🥇 1</td>
+            <td>আরিয়ান আহমেদ</td>
+            <td>Intermediate</td>
+            <td>950</td>
+        </tr>
+        <tr style="background: #f8f9fa;">
+            <td style="padding: 10px;">🥈 2</td>
+            <td>সারা ইসলাম</td>
+            <td>Beginner</td>
+            <td>880</td>
+        </tr>
+    </table>
+</div>
+</div>
+
+<script>
+  function openLevel(evt, levelName) {
+    var i, tabcontent, tablinks;
+    
+    tabcontent = document.getElementsByClassName("course-section");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].classList.remove("active");
+    }
+
+    tablinks = document.getElementsByClassName("tab-btn");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].classList.remove("active");
+    }
+
+    document.getElementById(levelName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+  }
+</script>
+
+</body>
+</html>

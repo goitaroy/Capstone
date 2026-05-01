@@ -1,0 +1,699 @@
+ <title>Class 03 - Input & Output Devices</title>
+    <style>
+      /* ১. ভেরিয়েবল এবং রুট সেটআপ */
+:root {
+    --primary: #0a4d68;
+    --secondary: #088395;
+    --accent: #00ffca;
+    --light: #f0f8ff;
+    --success: #2d6a4f;
+    --danger: #c92a2a;
+    --input-color: #219ebc;
+    --process-color: #fb8500;
+    --output-color: #023047;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+}
+
+/* ২. জেনারেল বডি স্টাইল */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--light);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+/* ৩. ডার্ক মোড সাপোর্ট */
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --text-color: #ffffff;
+}
+
+body.dark-mode .card {
+    background: var(--card-bg);
+    border-top-color: var(--accent);
+}
+
+body.dark-mode .info-box {
+    background: #2d2d2d !important;
+    border-color: #444;
+}
+
+body.dark-mode .game-card, body.dark-mode .ipo-wrapper {
+    background: #252525;
+    border-color: #333;
+}
+
+/* ৪. কার্ড এবং লেআউট */
+.card {
+    background: var(--card-bg);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid var(--secondary);
+    transition: transform 0.3s;
+}
+
+.card:hover { transform: translateY(-3px); }
+
+.flex-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.info-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.center { text-align: center; }
+
+/* ৫. আইপিও মেশিন এবং সাইকেল */
+.ipo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px 0;
+    background: rgba(0,0,0,0.02);
+    border-radius: 15px;
+}
+
+.ipo-step {
+    flex: 1;
+    max-width: 150px;
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.step-input { background: var(--input-color); }
+.step-process { background: var(--process-color); }
+.step-output { background: var(--output-color); }
+
+.machine-box {
+    background: #212529;
+    color: var(--accent);
+    padding: 30px;
+    border-radius: 15px;
+    font-family: 'Courier New', monospace;
+    border: 3px solid #444;
+    margin-top: 15px;
+}
+
+/* ৬. হার্ডওয়্যার চ্যালেঞ্জ (নতুন যোগ করা হয়েছে) */
+.challenge-step {
+    padding: 15px 0;
+    transition: 0.3s;
+}
+
+.challenge-step hr {
+    opacity: 0.1;
+    margin: 20px 0;
+}
+
+/* ৭. গেম এবং ড্র্যাগ-অ্যান্ড-ড্রপ */
+.game-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.game-card {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #eee;
+}
+
+.item {
+    background: var(--secondary);
+    color: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: grab;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.item:active { cursor: grabbing; }
+
+.dropzone {
+    min-height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+.dropzone.over {
+    background: rgba(0, 255, 202, 0.1);
+    border-color: var(--accent);
+}
+
+/* ৮. ফ্লোটিং কন্ট্রোলস */
+.floating-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10000;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid white;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.voice-bot.active {
+    background: var(--accent) !important;
+    animation: pulse 1s infinite;
+}
+
+/* ৯. এনিমেশনসমূহ */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0px rgba(0, 255, 202, 0.7); }
+    100% { box-shadow: 0 0 0 15px rgba(0, 255, 202, 0); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.celebrate { animation: bounce 0.5s ease 2; }
+
+/* ১০. ইনপুট, বাটন এবং কোড আউটপুট */
+button {
+    background: var(--secondary);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+button:hover { opacity: 0.9; transform: scale(1.05); }
+
+input[type="text"], input[type="number"] {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus { border-color: var(--secondary); }
+
+#code-output {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ১১. প্রোগ্রেস বার */
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary), var(--accent));
+    transition: width 0.5s ease;
+}
+
+.score-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+    </style>
+    <div class="floating-controls">
+    <button class="control-btn" onclick="toggleDarkMode()" style="background: #333; color: white;" title="ডার্ক মোড">🌓</button>
+    
+    <button class="control-btn" id="voiceBot" onclick="toggleGlobalVoice()" style="background: var(--primary); color: white;" title="ভয়েস মোড">🤖</button>
+</div>
+ <div class="container">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1>🎯 Class 03: Input & Output Devices</h1>
+        <div class="score-display">⭐ পয়েন্ট: <span id="scoreText">0</span></div>
+    </div>
+
+    <div class="card" style="border-top: 5px solid var(--accent);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong style="color: var(--primary);">তোমার অগ্রগতি (Learning Journey)</strong>
+            <span id="progress-percent" style="font-weight: bold; color: var(--secondary);">0%</span>
+        </div>
+        <div style="width: 100%; background: #eee; border-radius: 10px; height: 12px; overflow: hidden;">
+            <div id="progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--secondary), var(--accent)); transition: 0.8s ease;"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📘 ইনপুট ও আউটপুট কী?</h3>
+        <p>কম্পিউটারকে আমরা যা বলি বা দেই তা হলো <b>Input</b>। আর কম্পিউটার কাজ শেষে আমাদের যা দেখায় তা হলো <b>Output</b>।</p>
+        
+        <div class="flex-container">
+            <div class="info-box" style="background: #e7f5ff; border-left: 5px solid var(--input-color);">
+                <strong>📥 ইনপুট (Input):</strong> 
+                <p>আমাদের পঞ্চইন্দ্রিয়ের মতো। যেমন: কীবোর্ড, মাউস।</p>
+            </div>
+            <div class="info-box" style="background: #fff4e6; border-left: 5px solid var(--process-color);">
+                <strong>📤 আউটপুট (Output):</strong> 
+                <p>আমাদের মুখ বা অঙ্গভঙ্গির মতো। যেমন: মনিটর, স্পিকার।</p>
+            </div>
+        </div>
+        </div>
+         
+    <div class="card">
+        <h3>🔄 কম্পিউটার কীভাবে কাজ করে? (IPO Cycle)</h3>
+        <div class="ipo-wrapper" style="margin-bottom: 30px;">
+            <div class="ipo-step step-input">
+                <span class="step-icon">📥</span>
+                <strong>Input</strong>
+                <small style="display:block;">তথ্য প্রদান</small>
+            </div>
+            <div class="ipo-arrow">➡</div>
+            <div class="ipo-step step-process">
+                <span class="step-icon">⚙️</span>
+                <strong>Process</strong>
+                <small style="display:block;">CPU প্রসেসিং</small>
+            </div>
+            <div class="ipo-arrow">➡</div>
+            <div class="ipo-step step-output">
+                <span class="step-icon">📤</span>
+                <strong>Output</strong>
+                <small style="display:block;">ফলাফল</small>
+            </div>
+        </div>
+        <hr>
+        <div class="machine-area" style="margin-top: 20px;">
+            <h4>💻 লাইভ IPO মেশিন সিমুলেটর</h4>
+            <p>নিচে দুটি সংখ্যা যোগ করে দেখো কম্পিউটার কীভাবে কাজ করে:</p>
+            <div class="machine-box center">
+                <div id="machine-display" style="color: var(--accent); margin-bottom: 15px; font-weight: bold;">মেশিন তৈরি... ইনপুট দাও!</div>
+                <div class="flex-container" style="justify-content: center; align-items: center; flex-wrap: wrap;">
+                    <input type="number" id="num1" placeholder="সংখ্যা ১" style="width: 100px; margin: 5px;">
+                    <span style="font-size: 25px;"> + </span>
+                    <input type="number" id="num2" placeholder="সংখ্যা ২" style="width: 100px; margin: 5px;">
+                    <button onclick="runMachine()" style="background: var(--process-color); border-radius: 10px;">Run ⚙️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🎮 অ্যাক্টিভিটি জোন (Activity Zone)</h3>
+        <div class="game-container" style="margin-bottom: 30px;">
+            <div class="game-card">
+                <h4>ডিভাইসগুলো ধরো</h4>
+                <div id="items">
+                    <div class="item" draggable="true" id="i1" data-type="input">Keyboard ⌨️</div>
+                    <div class="item" draggable="true" id="i2" data-type="input">Mouse 🖱️</div>
+                    <div class="item" draggable="true" id="i3" data-type="output">Monitor 🖥️</div>
+                    <div class="item" draggable="true" id="i4" data-type="output">Speaker 🔊</div>
+                </div>
+            </div>
+            <div class="game-card" style="background: #f0fdf4;">
+                <h4 style="color: var(--success)">Input Box</h4>
+                <div class="dropzone" id="input"></div>
+            </div>
+            <div class="game-card" style="background: #fff5f5;">
+                <h4 style="color: var(--danger)">Output Box</h4>
+                <div class="dropzone" id="output"></div>
+            </div>
+        </div>
+        <hr>
+
+    <div class="card">
+    <h3>🛠️ হার্ডওয়্যার ও রাইটিং চ্যালেঞ্জ</h3>
+    
+    <div class="challenge-step" id="step1">
+        <p class="center">১. তোমার একটি ছবি প্রিন্ট করা দরকার, তুমি কোন ডিভাইসটি ব্যবহার করবে?</p>
+        <div class="center" style="margin-bottom: 25px;">
+            <button onclick="checkHardware('printer', 1)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🖨️ Printer</button>
+            <button onclick="checkHardware('mic', 1)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🎙️ Mic</button>
+            <button onclick="checkHardware('monitor', 1)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🖥️ Monitor</button>
+        </div>
+    </div>
+
+    <div class="challenge-step" id="step2">
+        <hr>
+        <p class="center" style="margin-top: 20px;">২. তুমি তোমার প্রিয় গানটি কম্পিউটারে রেকর্ড করতে চাও। কোনটি প্রয়োজন?</p>
+        <div class="center" style="margin-bottom: 25px;">
+            <button onclick="checkHardware('keyboard', 2)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">⌨️ Keyboard</button>
+            <button onclick="checkHardware('mic', 2)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🎙️ Microphone</button>
+            <button onclick="checkHardware('speaker', 2)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🔊 Speaker</button>
+        </div>
+    </div>
+
+    <div class="challenge-step" id="step3">
+        <hr>
+        <p class="center" style="margin-top: 20px;">৩. গেম খেলার সময় স্ক্রিনের কার্সর নড়াচড়া করতে তুমি কোনটি ব্যবহার করবে?</p>
+        <div class="center" style="margin-bottom: 25px;">
+            <button onclick="checkHardware('mouse', 3)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🖱️ Mouse</button>
+            <button onclick="checkHardware('printer', 3)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🖨️ Printer</button>
+            <button onclick="checkHardware('scanner', 3)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">📷 Scanner</button>
+        </div>
+    </div>
+
+    <div class="challenge-step" id="step4">
+        <hr>
+        <p class="center" style="margin-top: 20px;">৪. কার্টুন দেখার সময় শব্দ শোনার জন্য তোমার কোনটি দরকার?</p>
+        <div class="center" style="margin-bottom: 25px;">
+            <button onclick="checkHardware('mouse', 4)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🖱️ Mouse</button>
+            <button onclick="checkHardware('speaker', 4)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">🔊 Speaker</button>
+            <button onclick="checkHardware('webcam', 4)" class="item" style="display:inline-block; width: auto; padding: 10px 20px;">📷 Webcam</button>
+        </div>
+    </div>
+
+    <div id="hw-feedback" class="center" style="margin-bottom: 20px; font-weight: bold;"></div>
+    
+    <hr>
+    <div class="center" style="padding-top: 20px;">
+        <h4>✍️ টাইপিং টেস্ট</h4>
+        <input type="text" id="userInput" placeholder="একটি ইনপুট ডিভাইসের নাম লেখো..." oninput="checkWriting()" style="width: 80%; border: 2px solid var(--secondary);">
+        <div id="writeFeedback" style="margin-top:10px; font-weight:bold;"></div>
+    </div>
+</div>
+
+    <div class="card" style="border-left: 5px solid var(--success);">
+        <h3>💻 তোমার প্রথম কোড (Python Preview)</h3>
+        <p>নিচে তোমার নাম লেখো এবং দেখো প্রোগ্রামিংয়ে এটি কীভাবে কাজ করে!</p>
+        
+        <div style="background: #282c34; color: #abb2bf; padding: 25px; border-radius: 15px; font-family: 'Courier New', monospace; margin-bottom: 15px; font-size: 1.1rem;">
+            <div style="color: #61afef; margin-bottom: 5px;"># Python Code</div>
+            <div><span style="color: #e06c75;">name</span> = <span style="color: #98c379;">input</span>(<span style="color: #d19a66;">"তোমার নাম বলো: "</span>)</div>
+            <div id="dynamic-print-code" style="margin-top: 8px; transition: 0.3s; opacity: 0.3;">
+                <span style="color: #c678dd;">print</span>(<span style="color: #d19a66;">"হ্যালো, "</span> + <span style="color: #e06c75;">name</span>)
+            </div>
+        </div>
+
+        <div class="center">
+            <input type="text" id="coderName" placeholder="নাম লেখো..." oninput="updateCodePreview()">
+            <button onclick="runCode()" style="background: var(--success); font-size: 1.2rem; padding: 15px 30px;">রান কোড 🚀</button>
+        </div>
+
+        <div id="code-output" style="display: none; margin-top: 20px; padding: 20px; background: #023047; color: #00ffca; border-radius: 10px; font-family: monospace; text-align: center; border: 2px solid #00ffca;">
+            <strong id="output-text" style="font-size: 1.2rem;"></strong>
+        </div>
+    </div>
+
+    <div id="badge-container" class="card center" style="display: none; background: linear-gradient(135deg, #fff9c4, #fff); border: 2px solid #fbc02d;">
+        <div style="font-size: 80px; animation: bounce 1s infinite;">🥇</div>
+        <h2 style="color: #f57f17; margin: 10px 0;">অভিনন্দন! তুমি "I/O Master"</h2>
+        <p>তুমি ইনপুট এবং আউটপুটের সবগুলো ধাপ সফলভাবে শেষ করেছ!</p>
+    </div>
+
+    <div style="text-align:center; margin: 40px 0 80px 0;">
+        <button onclick="nextLevel()" style="background: linear-gradient(45deg, var(--primary), var(--secondary)); padding: 20px 60px; font-size: 22px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">পরবর্তী লেভেলে যাও 🚀</button>
+    </div>
+</div>
+<script>
+    // --- গ্লোবাল ভেরিয়েবল ---
+let score = 0;
+let draggedItem = null;
+let isGlobalVoiceActive = false;
+let completedTasks = new Set();
+const totalTasks = 6; // কুইজ, ড্র্যাগ, মেশিন, রাইটিং, হার্ডওয়্যার, কোডিং
+
+// --- ১. ভয়েস এবং সাউন্ড সিস্টেম ---
+function speak(text) {
+    window.speechSynthesis.cancel();
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = text;
+    msg.lang = 'bn-BD';
+    
+    // কথা বলার সময় বটের এনিমেশন কন্ট্রোল
+    const bot = document.getElementById('voiceBot');
+    msg.onstart = () => { if(bot) bot.classList.add('active'); };
+    msg.onend = () => { if(bot) bot.classList.remove('active'); };
+    
+    window.speechSynthesis.speak(msg);
+}
+
+function playSound(type) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === 'win') {
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    } else if (type === 'process') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    } else if (type === 'fail') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    }
+
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    osc.stop(audioCtx.currentTime + 0.4);
+}
+
+// --- ২. ড্যাশবোর্ড কন্ট্রোল (ভয়েস ও ডার্ক মোড) ---
+function toggleGlobalVoice() {
+    isGlobalVoiceActive = !isGlobalVoiceActive;
+    const bot = document.getElementById('voiceBot');
+    
+    if(isGlobalVoiceActive) {
+        bot.style.background = "var(--success)";
+        speak("ভয়েস মোড চালু হয়েছে। যেকোনো লেখার ওপর ক্লিক করো।");
+    } else {
+        bot.style.background = "var(--primary)";
+        speak("ভয়েস মোড বন্ধ করা হয়েছে।");
+    }
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    speak(isDark ? "ডার্ক মোড চালু হয়েছে" : "লাইট মোড চালু হয়েছে");
+}
+
+// গ্লোবাল ক্লিক লিসেনার (লেখার ওপর ক্লিক করলে পড়ার জন্য)
+document.addEventListener('click', function(e) {
+    if (!isGlobalVoiceActive) return;
+    const target = e.target;
+    if (target.innerText && !['BUTTON', 'INPUT', 'SELECT'].includes(target.tagName)) {
+        speak(target.innerText);
+    }
+}, true);
+
+// --- ৩. স্কোর এবং প্রোগ্রেস ম্যানেজমেন্ট ---
+function updateScore(points) {
+    score += points;
+    document.getElementById('scoreText').innerText = score;
+}
+
+function updateProgress(taskID) {
+    completedTasks.add(taskID);
+    let percent = Math.round((completedTasks.size / totalTasks) * 100);
+    
+    const bar = document.getElementById('progress-bar');
+    const text = document.getElementById('progress-percent');
+    
+    if(bar) bar.style.width = percent + "%";
+    if(text) text.innerText = percent + "%";
+
+    if(percent === 100) {
+        const badge = document.getElementById('badge-container');
+        if(badge) badge.style.display = 'block';
+        speak("অসাধারণ! তুমি সবগুলো ধাপ শেষ করে আই ও মাস্টার ব্যাজ জিতে নিয়েছ!");
+        playSound('win');
+    }
+}
+
+// --- ৪. গেম লজিক (Drag & Drop) ---
+document.querySelectorAll('.item').forEach(item => {
+    item.addEventListener('dragstart', function() {
+        draggedItem = this;
+        setTimeout(() => this.style.opacity = "0.5", 0);
+    });
+    item.addEventListener('dragend', function() {
+        this.style.opacity = "1";
+    });
+});
+
+document.querySelectorAll('.dropzone').forEach(zone => {
+    zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('over');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', function() {
+        this.classList.remove('over');
+        if (!draggedItem) return;
+
+        const type = draggedItem.getAttribute('data-type');
+        if (type === this.id) {
+            this.appendChild(draggedItem);
+            updateScore(1);
+            updateProgress('drag');
+            draggedItem.style.background = "var(--success)";
+            draggedItem.draggable = false;
+            draggedItem.style.cursor = "default";
+            speak("সঠিক হয়েছে! এটি একটি " + (type === 'input' ? "ইনপুট" : "আউটপুট") + " ডিভাইস।");
+        } else {
+            speak("ভুল বক্স! সঠিক বক্সে টেনে আনো।");
+            playSound('fail');
+        }
+        draggedItem = null;
+    });
+});
+
+function checkHardware(choice, questionNum) {
+    const fb = document.getElementById('hw-feedback');
+    let isCorrect = false;
+    let message = "";
+
+    // প্রতিটি প্রশ্নের জন্য সঠিক উত্তর চেক করা
+    if (questionNum === 1 && choice === 'printer') {
+        isCorrect = true;
+        message = "✅ একদম ঠিক! প্রিন্টার দিয়ে আমরা পেপার আউটপুট পাই।";
+    } else if (questionNum === 2 && choice === 'mic') {
+        isCorrect = true;
+        message = "✅ সাবাশ! মাইক্রোফোন শব্দ ইনপুট হিসেবে গ্রহণ করে।";
+    } else if (questionNum === 3 && choice === 'mouse') {
+        isCorrect = true;
+        message = "✅ দারুণ! মাউস দিয়ে আমরা স্ক্রিনে ইনপুট দেই।";
+    } else if (questionNum === 4 && choice === 'speaker') {
+        isCorrect = true;
+        message = "✅ সঠিক! স্পিকার আমাদের শব্দ আউটপুট দেয়।";
+    }
+
+    if (isCorrect) {
+        fb.innerText = message;
+        fb.style.color = "var(--success)";
+        speak(message);
+        updateScore(2);
+        updateProgress('hardware_' + questionNum); // আলাদা আইডি দিয়ে প্রোগ্রেস ট্র্যাক
+    } else {
+        fb.innerText = "❌ ভুল! আবার ভেবে দেখো।";
+        fb.style.color = "var(--danger)";
+        speak("উম্ম, এটি সঠিক নয়। আবার চেষ্টা করো!");
+        playSound('fail');
+    }
+}
+function checkWriting() {
+    const val = document.getElementById('userInput').value.toLowerCase().trim();
+    const fb = document.getElementById('writeFeedback');
+    const inputs = ["mouse", "keyboard", "scanner", "mic", "microphone"];
+    
+    if (inputs.includes(val)) {
+        fb.innerText = "🌟 সাবাশ! তুমি সঠিক লিখেছ।";
+        fb.style.color = "green";
+        speak("সাবাশ! তুমি একটি সঠিক ইনপুট ডিভাইসের নাম লিখেছো।");
+        updateProgress('writing');
+    }
+}
+
+// --- ৬. IPO মেশিন লজিক ---
+function runMachine() {
+    const n1 = parseInt(document.getElementById('num1').value);
+    const n2 = parseInt(document.getElementById('num2').value);
+    const display = document.getElementById('machine-display');
+
+    if (isNaN(n1) || isNaN(n2)) {
+        display.innerText = "❌ ভুল: বক্সে সংখ্যা লেখো!";
+        speak("দয়া করে বক্সে সংখ্যা লেখো");
+        playSound('fail');
+        return;
+    }
+
+    display.innerText = "📥 ইনপুট নেওয়া হচ্ছে...";
+    speak("ইনপুট নেওয়া হচ্ছে");
+    playSound('process');
+
+    setTimeout(() => {
+        display.innerText = `⚙️ প্রসেসিং: ${n1} + ${n2} যোগ করা হচ্ছে...`;
+        speak("ডেটা প্রসেসিং চলছে");
+        
+        setTimeout(() => {
+            const result = n1 + n2;
+            display.innerText = `📤 আউটপুট তৈরি! রেজাল্ট হলো: ${result}`;
+            speak(`আউটপুট তৈরি হয়েছে। উত্তর হলো ${result}`);
+            playSound('win');
+            updateScore(5);
+            updateProgress('machine');
+            
+            document.querySelector('.machine-box').classList.add('celebrate');
+            setTimeout(() => document.querySelector('.machine-box').classList.remove('celebrate'), 500);
+        }, 1500);
+    }, 1000);
+}
+
+// --- ৭. কোডিং প্রিভিউ লজিক ---
+function updateCodePreview() {
+    const val = document.getElementById('coderName').value;
+    const printCode = document.getElementById('dynamic-print-code');
+    if(val.length > 0) { printCode.style.opacity = "1"; } 
+    else { printCode.style.opacity = "0.3"; }
+}
+
+function runCode() {
+    const name = document.getElementById('coderName').value;
+    const outputDiv = document.getElementById('code-output');
+    const outText = document.getElementById('output-text');
+
+    if(name.trim() === "") {
+        speak("আগে ইনপুট বক্সে তোমার নাম লেখো!");
+        return;
+    }
+
+    outText.innerText = "কম্পিউটার বলছে: Hello, " + name + "!";
+    outputDiv.style.display = 'block';
+    
+    speak(`তুমি ইনপুট দিলে ${name}, আর কম্পিউটার আউটপুট দিল হ্যালো ${name}`);
+    playSound('win');
+    updateProgress('coding');
+    
+    if (window.navigator.vibrate) { window.navigator.vibrate(100); }
+}
+
+function nextLevel() {
+    speak("দারুণ! তুমি এই লেভেলটি সফলভাবে শেষ করেছো। চলো পরের লেভেলে যাই!");
+    setTimeout(() => {
+        alert("পরবর্তী লেভেল শীঘ্রই আসছে!");
+    }, 2000);
+}
+</script>

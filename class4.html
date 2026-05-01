@@ -1,0 +1,1044 @@
+ <title>Class 04 - Device Logic & Analysis</title>
+    <style>
+        /* 1. Global Variables & Base Styles */
+:root {
+    --primary: #0a4d68;
+    --secondary: #088395;
+    --accent: #ff9f1c;
+    --light: #f0f8ff;
+    --success: #2d6a4f;
+    --danger: #d90429;
+    --info: #4cc9f0;
+    --white: #ffffff;
+    --gray: #f8f9fa;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--light);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px 15px;
+}
+
+/* 2. Card & Typography */
+.card {
+    background: var(--white);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-top: 6px solid var(--secondary);
+    animation: fadeIn 0.8s ease-out;
+}
+
+h1 { text-align: center; color: var(--primary); font-size: 2.2rem; }
+h3 { color: var(--secondary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+
+/* 3. Logic Grid & Items */
+.logic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.logic-item {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    border-left: 4px solid;
+}
+
+.input-logic { background: #e7f5ff; border-color: #219ebc; }
+.output-logic { background: #fff4e6; border-color: #fb8500; }
+
+.storage-box {
+    background: #f3f0ff;
+    border: 1px solid #be4bdb;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* 4. Interactive Logic Table */
+.logic-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.95rem;
+}
+
+.logic-table th {
+    background-color: var(--secondary);
+    color: white;
+    text-align: left;
+    padding: 12px;
+}
+
+.logic-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.logic-table tr:hover { background-color: var(--gray); }
+
+.badge-input, .badge-output {
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+.badge-input { background: #e7f5ff; color: #219ebc; }
+.badge-output { background: #fff4e6; color: #fb8500; }
+
+/* 5. Flow Animations (Standard) */
+.animation-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 10px;
+    background: #fdfdfd;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.box {
+    width: 110px;
+    padding: 15px 5px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.85rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.input-box { background: #219ebc; }
+.cpu-box { background: var(--secondary); border: 2px solid var(--accent); }
+.output-box { background: #fb8500; }
+
+.wire-path {
+    width: 60px;
+    height: 4px;
+    background: #cbd5e0;
+    position: relative;
+    margin: 0 5px;
+}
+
+.data-packet {
+    position: absolute;
+    top: -14px;
+    left: -10px;
+    font-size: 20px;
+    animation: moveData 2s infinite linear;
+}
+
+/* 6. Hybrid & Phone Interaction */
+.interactive-phone-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: #fdfaff;
+    border-radius: 20px;
+}
+
+.phone-frame {
+    width: 150px;
+    height: 280px;
+    background: #333;
+    border-radius: 25px;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+
+.phone-frame:active { transform: scale(0.95); }
+
+.phone-screen {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    overflow: hidden;
+    position: relative;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.home-btn {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#ripple {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.animate-ripple { animation: rippleEffect 0.5s linear; }
+
+.signal-tag {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.input-tag { background: #e7f5ff; color: #219ebc; border: 1px solid #219ebc; }
+.output-tag { background: #fff4e6; color: #fb8500; border: 1px solid #fb8500; }
+
+/* 7. Quiz Elements */
+.scenario-box {
+    background: var(--gray);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+    border: 1px dashed var(--secondary);
+    font-weight: 500;
+}
+
+.option-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    background: var(--white);
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: var(--light);
+    border-color: var(--secondary);
+}
+
+.correct-style { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 10px; }
+.wrong-style { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 15px; border-radius: 10px; }
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.primary-btn:hover { background: var(--secondary); transform: translateY(-2px); }
+
+/* 8. Keyframes & Media Queries */
+@keyframes moveData {
+    0% { left: -10%; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+@keyframes rippleEffect { to { transform: scale(3); opacity: 0; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+@media screen and (max-width: 600px) {
+    .logic-grid { grid-template-columns: 1fr; }
+    .logic-table { font-size: 0.85rem; }
+    .box { width: 80px; font-size: 0.75rem; }
+    .wire-path { width: 35px; }
+}
+.step-badge {
+    background: #0a4d68;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.logic-msg-box {
+    width: 90%;
+    max-width: 350px;
+    min-height: 60px;
+    background: #f3f0ff;
+    border: 2px dashed #be4bdb;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 15px auto 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #333;
+}
+
+.highlight-input { color: #219ebc; }
+.highlight-output { color: #fb8500; }
+.sticky-progress {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--white);
+    padding: 15px;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+.progress-fill {
+    width: 0%; /* শুরুতে ০ থাকবে */
+    height: 100%;
+    background: linear-gradient(90deg, #06b6d4, #10b981);
+    transition: width 0.5s ease-in-out;
+}
+.sticky-progress {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1000;
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.progress-track {
+    background: #e2e8f0;
+    height: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--info), var(--success));
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-info {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: var(--primary);
+}
+
+/* লক করা বাটনের স্টাইল */
+.locked-btn {
+    filter: grayscale(1);
+    opacity: 0.6;
+    cursor: not-allowed !important;
+    pointer-events: none;
+}
+    </style>
+     
+  <div class="container">
+    <h1>🎯 Class 04: Device Logic & Mastery</h1>
+    <div class="sticky-progress">
+    <div class="progress-info">
+        <span>তোমার আজকের অগ্রগতি: <span id="globalProgressText">০%</span></span>
+    </div>
+    <div class="progress-track">
+        <div id="globalProgressBar" class="progress-fill"></div>
+    </div>
+</div>
+    <div class="card" style="background: linear-gradient(135deg, #0a4d68, #088395); color: white; border: none; text-align: center;">
+        <h2 style="color: #ff9f1c; margin: 0;">🚀 ডিভাইস লজিক মাস্টার ক্লাসে স্বাগতম!</h2>
+        <p style="opacity: 0.9;">আজ আমরা দেখবো আমরা আগের ক্লাসগুলো থেকে কতটা 'ডিভাইস এক্সপার্ট' হতে পেরেছি।</p>
+        
+        <div style="display: flex; justify-content: space-around; margin-top: 20px; font-size: 0.85rem;">
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; flex: 1; margin: 5px;">
+                <strong>ধাপ ১:</strong><br>ডিভাইস গোয়েন্দা
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; flex: 1; margin: 5px;">
+                <strong>ধাপ ২:</strong><br>সিনারিও চ্যালেঞ্জ
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; flex: 1; margin: 5px;">
+                <strong>ধাপ ৩:</strong><br>হাইব্রিড মাস্টার
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-top: 6px solid var(--info); background: #f0faff;">
+        <h3 style="color: var(--info); border-bottom-color: #d0e8f2;">⏳ কুইক রিভিশন (30-Second Recap)</h3>
+        <p>আজকের প্র্যাকটিস শুরু করার আগে চলো ঝটপট মনে করে নেই:</p>
+        <ul style="list-style: none; padding: 0; line-height: 1.8;">
+            <li>🔵 <strong>ইনপুট (Input):</strong> কম্পিউটারকে কিছু বলা বা নির্দেশ দেওয়া। (যেমন: মাউসে ক্লিক)</li>
+            <li>🟢 <strong>আউটপুট (Output):</strong> কম্পিউটার থেকে ফলাফল পাওয়া। (যেমন: মনিটরে দেখা)</li>
+            <li>🟠 <strong>প্রসেসিং (Processing):</strong> কম্পিউটার যখন মাঝখানে কাজটা করে। (যেমন: CPU)</li>
+        </ul>
+    </div>
+
+    <div class="card" style="text-align: center; border-top-color: var(--accent);">
+        <h3>📡 ডাটা কীভাবে কাজ করে? (Visual Flow)</h3>
+        <p>নিচের অ্যানিমেশনটি দেখো: ইনপুট থেকে ডাটা নিয়ে CPU প্রসেস করে আউটপুটে পাঠাচ্ছে।</p>
+        <div class="animation-container">
+            <div class="box input-box">📥<br>ইনপুট</div>
+            <div class="wire-path"><div class="data-packet">📧</div></div>
+            <div class="box cpu-box">⚙️<br>প্রসেসিং</div>
+            <div class="wire-path"><div class="data-packet" style="animation-delay: 1s;">📄</div></div>
+            <div class="box output-box">📤<br>আউটপুট</div>
+        </div>
+    </div>
+
+    <div class="card" style="border-left: 6px solid var(--accent); background: #fffbeb;">
+        <p><strong>🤔 ওয়ার্ম-আপ ধাঁধা:</strong></p>
+        <p>"তুমি কম্পিউটারে একটি গেম খেলছো। তুমি কিবোর্ড দিয়ে কমান্ড দিচ্ছো আর মনিটরে গেমটি দেখছো। এখানে কিবোর্ড আর মনিটরের মধ্যে সম্পর্ক কী?"</p>
+        <button class="primary-btn" style="padding: 5px 15px; font-size: 0.8rem;" onclick="revealWarmup()">উত্তর দেখো ✨</button>
+        <p id="warmupAnswer" style="display:none; margin-top: 10px; color: var(--success); font-weight: bold;">
+            উত্তর: কিবোর্ড তথ্য ভেতরে পাঠাচ্ছে (Input) আর মনিটর সেই ফলাফল তোমাকে দেখাচ্ছে (Output)!
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🔍 ধাপ ১: ডিভাইস গোয়েন্দা (The Action Logic)</h3>
+        <p>কোনো ডিভাইস দেখে কনফিউজড হয়ে গেলে নিজেকে এই প্রশ্নটি করো:</p>
+        <div class="logic-grid">
+            <div class="logic-item input-logic">
+                <strong>১. কাজ কি ভেতর পানে?</strong><br>
+                যদি ডিভাইসটি তোমার থেকে কোনো তথ্য বা কথা নিয়ে কম্পিউটারের <b>ভেতরে</b> পাঠায়, তবে সেটি <b>ইনপুট</b>।
+            </div>
+            <div class="logic-item output-logic">
+                <strong>২. কাজ কি বাহির পানে?</strong><br>
+                যদি ডিভাইসটি কম্পিউটারের ভেতর থেকে রেজাল্ট <b>বাইরে</b> বের করে আনে, তবে সেটি <b>আউটপুট</b>।
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-top-color: var(--info);">
+        <h3>📊 লজিক টেবিল: কেন এবং কীভাবে?</h3>
+        <div style="overflow-x: auto;">
+            <table class="logic-table">
+                <thead>
+                    <tr>
+                        <th>ডিভাইসের নাম</th>
+                        <th>এটি কী কাজ করে?</th>
+                        <th>লজিক</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>স্ক্যানার (Scanner)</strong></td>
+                        <td>কাগজ থেকে ছবি কম্পিউটারে নেয়।</td>
+                        <td><span class="badge-input">ইনপুট</span> তথ্য ভেতরে ঢুকছে।</td>
+                    </tr>
+                    <tr>
+                        <td><strong>প্রিন্টার (Printer)</strong></td>
+                        <td>কম্পিউটার থেকে ছবি কাগজে বের করে।</td>
+                        <td><span class="badge-output">আউটপুট</span> তথ্য বাইরে আসছে।</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ওয়েবক্যাম (Webcam)</strong></td>
+                        <td>তোমার ভিডিও রেকর্ড করে।</td>
+                        <td><span class="badge-input">ইনপুট</span> ভিডিও ভেতরে পাঠাচ্ছে।</td>
+                    </tr>
+                    <tr>
+                        <td><strong>স্পিকার (Speaker)</strong></td>
+                        <td>কম্পিউটারের শব্দ আমাদেরোনায়।</td>
+                        <td><span class="badge-output">আউটপুট</span> শব্দ বাইরে আসছে।</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+   <div class="card" style="border-top-color: #be4bdb;">
+    <h3 style="text-align: center;">🔄 হাইব্রিড ডিভাইস (Hybrid Devices) কী?</h3>
+    
+    <div style="background: #fdfaff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #be4bdb;">
+        <p>কিছু ডিভাইস আছে যারা <b>উভয়মুখী</b> কাজ করতে পারে। অর্থাৎ তারা একইসাথে আমাদের থেকে তথ্য নিতে পারে (Input) আবার আমাদের ফলাফল দেখাতেও পারে (Output)। এগুলোকেই আমরা বলি <b>হাইব্রিড ডিভাইস</b>।</p>
+        
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+            <div style="flex: 1; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <strong style="color: #219ebc;">📥 ইনপুট অংশ:</strong><br>
+                যখন তুমি স্ক্রিনে আঙুল দিয়ে টাচ করো বা কমান্ড দাও।
+            </div>
+            <div style="flex: 1; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <strong style="color: #fb8500;">📤 আউটপুট অংশ:</strong><br>
+                যখন স্ক্রিন তোমাকে ছবি, ভিডিও বা লেখা দেখায়।
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <p><strong>📱 হাতে-কলমে প্র্যাকটিস:</strong> নিচে ফোনে টাচ করে ধাপগুলো দেখো!</p>
+        
+        <div class="interactive-phone-area">
+            <div id="stepCounter" class="step-badge">ধাপ: ০/৩</div>
+            
+            <div class="phone-frame" onclick="triggerHybridAction()">
+                <div class="phone-screen" id="mainScreen">
+                    <div id="screenContent">
+                        <div id="textIcon" style="font-size: 40px; transition: 0.5s;">📱</div>
+                        <div id="statusText">শুরু করতে টাচ করো</div>
+                    </div>
+                    <div id="ripple"></div>
+                </div>
+            </div>
+
+            <div id="logicMessage" class="logic-msg-box">
+                অপেক্ষা করছি...
+            </div>
+        </div>
+    </div>
+        <p id="logicExplainer" style="margin-top: 15px; font-weight: bold; color: var(--secondary); min-height: 24px;"></p>
+        <div class="storage-box" style="background: #f3f0ff; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: left; border: 1px solid #be4bdb;">
+            <strong>📦 স্টোরেজ বনাম ইনপুট:</strong><br>
+            ইনপুট হলো 'নির্দেশ'। আর স্টোরেজ হলো 'আলমারি' (যেমন: পেনড্রাইভ) যেখানে তথ্য জমা থাকে। আলমারি নিজে কোনো নির্দেশ দেয় না!
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🎮 সিনারিও কুইজ (Error Analysis সহ)</h3>
+        
+        <div id="quiz-box">
+            <div class="scenario-box" id="questionText">লোড হচ্ছে...</div>
+            <div id="optionsArea"></div>
+        </div>
+
+        <div id="feedbackArea" style="display: none; margin-top: 20px;">
+            <strong id="resultTitle"></strong>
+            <div id="analysisContent" style="margin-top: 10px; font-size: 0.9rem; border-top: 1px solid #eee; padding-top: 10px;"></div>
+        </div>
+
+        <div class="nav-btns" style="text-align: center; margin-top: 20px;">
+            <button id="nextBtn" class="primary-btn" onclick="nextQuestion()" style="display: none;">পরবর্তী চ্যালেঞ্জ ➔</button>
+        </div>
+    </div>
+    <div class="card" style="border-top-color: var(--danger);">
+    <h3>🕵️‍♂️ Mistake Finder: ভুল খুঁজে বের করো!</h3>
+    <p>নিচের ডিভাইসটির কাজ কি সঠিক? চিন্তা করে উত্তর দাও।</p>
+    <div id="mistake-box" class="scenario-box" style="text-align: center;">
+        <span id="mistake-device" style="font-size: 1.5rem; display: block; margin-bottom: 10px;">🎧 Headphone</span>
+        <p id="mistake-statement">"আমি এটি দিয়ে কম্পিউটারে কমান্ড টাইপ করি।"</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+            <button class="primary-btn" style="background: var(--success);" onclick="checkMistake(true)">সঠিক</button>
+            <button class="primary-btn" style="background: var(--danger);" onclick="checkMistake(false)">ভুল</button>
+        </div>
+        <p id="mistake-feedback" style="margin-top: 15px; font-weight: bold; display: none;"></p>
+    </div>
+</div>
+
+<div class="card" style="border-top-color: var(--accent); text-align: center;">
+    <h3>⚡ Speed Run: ভয়েস চ্যালেঞ্জ!</h3>
+    <p>১০ সেকেন্ড সময়! দ্রুত ৩টি <b>ইনপুট</b> ডিভাইসের নাম বলো।</p>
+    
+    <div id="timer-display" style="font-size: 3.5rem; font-weight: bold; color: var(--danger); margin: 10px 0;">10</div>
+    
+    <div id="voice-status" style="font-weight: bold; margin-bottom: 10px; color: #666;">রেডি হলে বাটন চাপো</div>
+
+    <div id="live-speech-box" style="min-height: 50px; background: #fff; border: 2px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 20px; font-style: italic; color: var(--secondary);">
+        ক্লিক করে বলা শুরু করো...
+    </div>
+
+    <div id="final-results" style="display:none; background: #fdfaff; padding: 15px; border-radius: 12px; border: 1px solid #be4bdb;">
+        <h4 style="margin-top:0;">যাচাই করা ফলাফল:</h4>
+        <div id="result-list" style="display: flex; flex-direction: column; gap: 8px; align-items: center;"></div>
+    </div>
+
+    <button id="startTimerBtn" class="primary-btn" onclick="startStrictSpeedRun()">চ্যালেঞ্জ শুরু করো!</button>
+</div>
+
+    <div class="card" style="background: #fff9db; border-top-color: var(--accent);">
+        <h3>🧐 "What If?" লজিক টেস্ট</h3>
+        <p><strong>প্রশ্ন:</strong> যদি তোমার কম্পিউটারে কোনো <b>আউটপুট ডিভাইস</b> না থাকে, তবে কী হবে?</p>
+        <p><strong>উত্তর:</strong> কম্পিউটার চালু হলেও তুমি কিছুই দেখতে বা শুনতে পারবে না। অর্থাৎ, আউটপুট ছাড়া কম্পিউটার আমাদের সাথে যোগাযোগ করতে পারে না। আমাদের পঞ্চইন্দ্রিয় না থাকলে আমরা যেমন পৃথিবী বুঝতে পারতাম না, কম্পিউটারের অবস্থাও তেমন হতো।</p>
+    </div>
+
+    <div style="text-align:center; margin-bottom: 50px;">
+        <button class="primary-btn" style="background:var(--secondary); padding: 20px 50px; font-size: 20px;">পরবর্তী লেভেলে যাও 🚀</button>
+    </div>
+</div>
+<script>
+    // ট্র্যাকিং অবজেক্ট: কোন অংশ শেষ হয়েছে তা ট্র্যাক করবে
+let classProgress = {
+    warmup: false,
+    quiz: false,
+    mistakeFinder: false,
+    speedRun: false
+};
+
+// প্রগ্রেস আপডেট করার মেইন ফাংশন
+function updateGlobalProgress() {
+    const steps = Object.values(classProgress);
+    const completedSteps = steps.filter(step => step === true).length;
+    const totalSteps = steps.length;
+    const progressPercent = Math.round((completedSteps / totalSteps) * 100);
+
+    // UI আপডেট
+    document.getElementById('globalProgressBar').style.width = progressPercent + "%";
+    document.getElementById('globalProgressText').innerText = progressPercent + "%";
+
+    // যদি ১০০% শেষ হয়, তবে নেক্সট লেভেল বাটন আনলক হবে
+    const nextLevelBtn = document.querySelector('.primary-btn[style*="background:var(--secondary)"]');
+    if (progressPercent === 100) {
+        nextLevelBtn.classList.remove('locked-btn');
+        nextLevelBtn.innerText = "পরবর্তী লেভেলে যাও 🚀 (আনলক হয়েছে)";
+        nextLevelBtn.onclick = function() { window.location.href = 'next_class.html'; }; // তোমার পরবর্তী ক্লাসের লিঙ্ক
+    } else {
+        nextLevelBtn.classList.add('locked-btn');
+        nextLevelBtn.innerText = "আগের কাজগুলো শেষ করো 🔒";
+    }
+}
+
+// --- প্রতিটি অ্যাকশনের সাথে কানেক্ট করা ---
+
+// ১. ওয়ার্ম-আপ ধাঁধা শেষ করলে
+function revealWarmup() {
+    document.getElementById('warmupAnswer').style.display = 'block';
+    classProgress.warmup = true;
+    updateGlobalProgress();
+}
+
+// ২. কুইজ শেষ করলে (তোমার কুইজ লজিকের শেষে এটি কল করো)
+// উদাহরণস্বরূপ:
+function finishQuiz() {
+    classProgress.quiz = true;
+    updateGlobalProgress();
+}
+
+// ৩. মিস্টেক ফাইন্ডার অন্তত একবার খেললে
+function checkMistake(choice) {
+    // ... তোমার আগের লজিক ...
+    classProgress.mistakeFinder = true;
+    updateGlobalProgress();
+}
+
+// ৪. স্পিড রান সফলভাবে শেষ করলে
+function showAndVerify(attempts) {
+    // ... তোমার আগের লজিক ...
+    if(attempts.length > 0) { // অন্তত কিছু বললে প্রগ্রেস বাড়বে
+        classProgress.speedRun = true;
+        updateGlobalProgress();
+    }
+}
+
+// পেজ লোড হওয়ার সময় বাটন লক রাখা
+document.addEventListener('DOMContentLoaded', () => {
+    updateGlobalProgress();
+});
+   // ১. কুইজ ডেটা সেট
+const questions = [
+    {
+        q: "১. তুমি একটি ডিজিটাল ছবি আঁকলে। এখন সেটি তোমার বন্ধুর হাতে দেওয়ার জন্য কাগজে ছাপিয়ে (Hard Copy) বের করতে চাও। কোন ডিভাইসটি লাগবে?",
+        options: [
+            { text: "Scanner", correct: false, reason: "ভুল! স্ক্যানার কাগজ থেকে তথ্য কম্পিউটারে নেয় (ইনপুট)। কিন্তু আমরা চাই কম্পিউটার থেকে কাগজ বের করতে।" },
+            { text: "Printer", correct: true, reason: "সঠিক! প্রিন্টার হার্ড কপি আউটপুট দেয়। এটি তথ্যকে কম্পিউটার থেকে কাগজে বের করে আনে।" },
+            { text: "Monitor", correct: false, reason: "মনিটর শুধু সফট কপি দেখায়। এটি তোমাকে কাগজ দিতে পারবে না।" }
+        ]
+    },
+    {
+        q: "২. তুমি পেনড্রাইভ থেকে একটি মুভি কম্পিউটারে কপি করলে। এখানে পেনড্রাইভটি কী হিসেবে কাজ করছে?",
+        options: [
+            { text: "ইনপুট ডিভাইস", correct: false, reason: "ভুল! পেনড্রাইভ মূলত একটি 'স্টোরেজ ডিভাইস'। এটি তথ্য জমা রাখে, নির্দেশ দেয় না।" },
+            { text: "আউটপুট ডিভাইস", correct: false, reason: "ভুল! এটি ফলাফল দেখায় না, শুধু তথ্য বহন করে।" },
+            { text: "স্টোরেজ ডিভাইস", correct: true, reason: "সঠিক! পেনড্রাইভ হলো তথ্যের আলমারি। এখান থেকে তথ্য নেওয়া বা রাখা যায়।" }
+        ]
+    },
+    {
+        q: "৩. অনলাইন ক্লাসে স্যার তোমার কথা শুনতে পাচ্ছেন না। এর মানে তোমার কোন ইনপুট ডিভাইসটিতে সমস্যা হয়েছে?",
+        options: [
+            { text: "Speaker", correct: false, reason: "ভুল! স্পিকার হলো আউটপুট। এটি দিয়ে তুমি স্যারের কথা শোনো, তোমার কথা পাঠাতে পারো না।" },
+            { text: "Microphone", correct: true, reason: "সঠিক! মাইক্রোফোন শব্দকে ইনপুট হিসেবে কম্পিউটারে পাঠায়।" },
+            { text: "Webcam", correct: false, reason: "ওয়েবক্যাম শুধু ভিডিও ইনপুট নেয়, শব্দ নয়।" }
+        ]
+    }
+];
+
+let currentIndex = 0;
+let score = 0;
+
+// ২. প্রাথমিক কুইজ লোড করার ফাংশন
+function loadQuestion() {
+    // প্রগ্রেস বার আপডেট
+    const progress = (currentIndex / questions.length) * 100;
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    
+    if (progressBar) progressBar.style.width = progress + "%";
+    if (progressText) progressText.innerText = Math.round(progress) + "%";
+
+    // কুইজ শেষ চেক
+    if (currentIndex >= questions.length) {
+        showFinalBadge();
+        return;
+    }
+
+    const qData = questions[currentIndex];
+    document.getElementById('questionText').innerText = qData.q;
+    const optionsArea = document.getElementById('optionsArea');
+    optionsArea.innerHTML = '';
+
+    qData.options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt.text;
+        btn.onclick = () => handleAnswer(opt);
+        optionsArea.appendChild(btn);
+    });
+
+    document.getElementById('feedbackArea').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+}
+
+// ৩. উত্তর যাচাই করার ফাংশন
+function handleAnswer(opt) {
+    const feedbackArea = document.getElementById('feedbackArea');
+    const resultTitle = document.getElementById('resultTitle');
+    const analysisContent = document.getElementById('analysisContent');
+
+    feedbackArea.style.display = 'block';
+    
+    if (opt.correct) {
+        score++;
+        resultTitle.innerText = "✅ একদম সঠিক!";
+        feedbackArea.className = "correct-style";
+    } else {
+        resultTitle.innerText = "❌ একটু ভুল হয়েছে!";
+        feedbackArea.className = "wrong-style";
+    }
+
+    analysisContent.innerHTML = "<strong>লজিক অ্যানালাইসিস:</strong> " + opt.reason;
+
+    // বাটনগুলো ডিজেবল করা
+    const btns = document.querySelectorAll('.option-btn');
+    btns.forEach(b => b.disabled = true);
+
+    document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+// ৪. পরবর্তী প্রশ্নে যাওয়ার ফাংশন
+function nextQuestion() {
+    currentIndex++;
+    loadQuestion();
+}
+
+// ৫. ব্যাজ সিস্টেম ও কনফেটি (কুইজ শেষ হলে)
+function showFinalBadge() {
+    const quizBox = document.getElementById('quiz-box');
+    quizBox.innerHTML = `
+        <div style="text-align:center; animation: fadeIn 1s; padding: 20px;">
+            <h2 style="color:var(--success);">🎊 অভিনন্দন!</h2>
+            <div style="font-size: 80px; margin: 20px;">🎖️</div>
+            <h3>তুমি এখন একজন "Device Logic Master"</h3>
+            <p>তোমার স্কোর: ${score} আউট অফ ${questions.length}</p>
+            <p>তুমি সফলভাবে আজকের সব চ্যালেঞ্জ পার করেছো।</p>
+            <button class="primary-btn" onclick="location.reload()">আবার শুরু করো</button>
+        </div>
+    `;
+    
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('feedbackArea').style.display = 'none';
+
+    // কনফেটি ইফেক্ট
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+}
+
+// ৬. ওয়ার্ম-আপ ধাঁধা রিভিল ফাংশন
+function revealWarmup() {
+    const ans = document.getElementById('warmupAnswer');
+    if (ans) ans.style.display = 'block';
+}
+
+function triggerHybridAction() {
+    const screen = document.getElementById('mainScreen');
+    const statusText = document.getElementById('statusText');
+    const textIcon = document.getElementById('textIcon');
+    const logicMessage = document.getElementById('logicMessage');
+    const stepCounter = document.getElementById('stepCounter');
+    const ripple = document.getElementById('ripple');
+
+    // টাচ রিপল ইফেক্ট
+    ripple.classList.remove('animate-ripple');
+    void ripple.offsetWidth;
+    ripple.classList.add('animate-ripple');
+
+    // ধাপ ১: ইনপুট শুরু
+    stepCounter.innerText = "ধাপ: ১/৩ (Input)";
+    textIcon.innerText = "👆";
+    statusText.innerText = "আঙুলের টাচ...";
+    logicMessage.innerHTML = "<span class='highlight-input'>📥 তোমার আঙুল কম্পিউটারে সিগন্যাল পাঠালো (ইনপুট)।</span>";
+    screen.style.background = "#1a1a1a";
+
+    // ধাপ ২: প্রসেসিং (১.২ সেকেন্ড পর)
+    setTimeout(() => {
+        stepCounter.innerText = "ধাপ: ২/৩ (Processing)";
+        textIcon.innerText = "⚙️";
+        statusText.innerText = "প্রসেস হচ্ছে...";
+        logicMessage.innerHTML = "⚙️ স্মার্টফোন এখন তোমার কমান্ডটি প্রসেস করছে...";
+    }, 1200);
+
+    // ধাপ ৩: আউটপুট (২.৮ সেকেন্ড পর)
+    setTimeout(() => {
+        stepCounter.innerText = "ধাপ: ৩/৩ (Output)";
+        textIcon.innerText = "🎬";
+        statusText.innerText = "রেজাল্ট দেখাচ্ছে!";
+        logicMessage.innerHTML = "<span class='highlight-output'>📤 স্ক্রিন এখন তোমাকে ভিডিও দেখাচ্ছে (আউটপুট)।</span>";
+        screen.style.background = "#2d6a4f";
+        
+        // রিসেট (৫ সেকেন্ড পর)
+        setTimeout(() => {
+            stepCounter.innerText = "ধাপ: ০/৩";
+            textIcon.innerText = "📱";
+            statusText.innerText = "আবার টাচ করো";
+            logicMessage.innerHTML = "অপেক্ষা করছি...";
+            screen.style.background = "#000";
+        }, 3500);
+    }, 2800);
+}
+// প্রাথমিক কল
+window.onload = loadQuestion;
+// --- Mistake Finder Logic ---
+const mistakes = [
+    { device: "🎧 Headphone", statement: "আমি এটি দিয়ে কম্পিউটারে কমান্ড টাইপ করি।", isCorrect: false, reason: "ভুল! হেডফোন দিয়ে আমরা শব্দ শুনি (Output), টাইপ করার জন্য কিবোর্ড লাগে।" },
+    { device: "🖱️ Mouse", statement: "আমি এটি দিয়ে কম্পিউটারকে নির্দেশ দেই কোথায় ক্লিক করতে হবে।", isCorrect: true, reason: "সঠিক! মাউস একটি পয়েন্টার ইনপুট ডিভাইস।" },
+    { device: "🖨️ Printer", statement: "আমি এটি ব্যবহার করে কম্পিউটারের ভেতরে ছবি ঢুকাই।", isCorrect: false, reason: "ভুল! প্রিন্টার ছবি বের করে (Output), ভেতরে ঢোকানোর জন্য স্ক্যানার লাগে।" }
+];
+
+let mistakeIndex = 0;
+
+function checkMistake(userChoice) {
+    const feedback = document.getElementById('mistake-feedback');
+    const current = mistakes[mistakeIndex];
+    
+    feedback.style.display = "block";
+    
+    if (userChoice === current.isCorrect) {
+        feedback.innerHTML = "✅ দারুণ! " + current.reason;
+        feedback.style.color = "var(--success)";
+    } else {
+        feedback.innerHTML = "❌ উফ! " + current.reason;
+        feedback.style.color = "var(--danger)";
+    }
+
+    // ২ সেকেন্ড পর পরবর্তী মিস্টেক লোড হবে
+    setTimeout(() => {
+        mistakeIndex = (mistakeIndex + 1) % mistakes.length;
+        document.getElementById('mistake-device').innerText = mistakes[mistakeIndex].device;
+        document.getElementById('mistake-statement').innerText = mistakes[mistakeIndex].statement;
+        feedback.style.display = "none";
+    }, 3000);
+}
+
+// ১. ইনপুট ডিভাইসের তালিকা (সম্ভাব্য সব বানানের ভেরিয়েশন সহ)
+const inputDevices = [
+    "mouse", "mous", "mice", 
+    "keyboard", "keybord", "key board", 
+    "scanner", "scaner", "scaning",
+    "microphone", "mic", "mike", 
+    "webcam", "camera", "web cam",
+    "joystick", "joy stick",
+    "touchpad", "touch pad"
+];
+
+// ২. মেইন স্পিড রান ফাংশন
+function startStrictSpeedRun() {
+    const display = document.getElementById('timer-display');
+    const btn = document.getElementById('startTimerBtn');
+    const voiceStatus = document.getElementById('voice-status');
+    const liveBox = document.getElementById('live-speech-box');
+    const finalResults = document.getElementById('final-results');
+    const resultList = document.getElementById('result-list');
+    
+    let timeLeft = 10;
+    let userAttempts = [];
+
+    // Speech Recognition Setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("আপনার ব্রাউজারে ভয়েস সাপোর্ট নেই। Chrome ব্যবহার করুন।");
+        return;
+    }
+    
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+        
+        if (!userAttempts.includes(transcript)) {
+            userAttempts.push(transcript);
+            if(userAttempts.length === 1) liveBox.innerHTML = ""; 
+            liveBox.innerHTML += `<span style="background:#eee; padding:2px 8px; border-radius:5px; margin:2px; display:inline-block;">${transcript}</span> `;
+        }
+    };
+
+    // গেম রিসেট ও শুরু
+    btn.disabled = true;
+    finalResults.style.display = "none";
+    resultList.innerHTML = "";
+    liveBox.innerHTML = "শুনছি... বলো!";
+    recognition.start();
+    voiceStatus.innerText = "🎤 সময় চলছে!";
+    voiceStatus.style.color = "red";
+
+    const interval = setInterval(() => {
+        timeLeft--;
+        display.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            recognition.stop();
+            btn.disabled = false;
+            btn.innerText = "আবার খেলো";
+            voiceStatus.innerText = "⌛ সময় শেষ!";
+            voiceStatus.style.color = "#2d6a4f";
+            
+            showAndVerify(userAttempts);
+        }
+    }, 1000);
+}
+
+// ৩. ভেরিফিকেশন ফাংশন (যেখানে মেইন চেকিং হয়)
+function showAndVerify(attempts) {
+    const resultList = document.getElementById('result-list');
+    const finalResults = document.getElementById('final-results');
+    resultList.innerHTML = ""; 
+    finalResults.style.display = "block";
+
+    if (attempts.length === 0) {
+        resultList.innerHTML = "<p style='color:red'>তুমি কিছুই বলোনি! 😮</p>";
+        return;
+    }
+
+    let correctCount = 0;
+
+    attempts.forEach(word => {
+        // [গুরুত্বপূর্ণ] শব্দের শেষের ডট (.), কমা বা স্পেস মুছে ফেলা
+        let cleanWord = word.replace(/[.,]/g, "").trim().toLowerCase();
+        
+        const isCorrect = inputDevices.includes(cleanWord);
+        if (isCorrect) correctCount++;
+
+        const item = document.createElement('div');
+        item.style.padding = "10px";
+        item.style.borderRadius = "8px";
+        item.style.width = "90%";
+        item.style.fontWeight = "bold";
+        item.style.marginBottom = "8px";
+        item.style.border = "1px solid";
+        
+        if (isCorrect) {
+            item.style.background = "#d4edda";
+            item.style.color = "#155724";
+            item.style.borderColor = "#c3e6cb";
+            item.innerHTML = `✅ ${cleanWord.toUpperCase()} - এটি সঠিক ইনপুট!`;
+        } else {
+            item.style.background = "#f8d7da";
+            item.style.color = "#721c24";
+            item.style.borderColor = "#f5c6cb";
+            item.innerHTML = `❌ ${cleanWord.toUpperCase()} - এটি ভুল বা অন্য ডিভাইস।`;
+        }
+        resultList.appendChild(item);
+    });
+
+    // ফাইনাল রেজাল্ট অ্যালার্ট
+    setTimeout(() => {
+        if (correctCount >= 3) {
+            alert(`🎊 অভিনন্দন! তুমি ${correctCount}টি সঠিক নাম বলেছো।`);
+        } else {
+            alert(`আরেকটু পড়াশোনা করো! তুমি মাত্র ${correctCount}টি সঠিক নাম বলেছো। আমাদের ৩টি নাম দরকার।`);
+        }
+    }, 600);
+}
+// ১. প্রগ্রেস ট্র্যাকার অবজেক্ট
+let progressStatus = {
+    warmup: 0,
+    quiz: 0,
+    mistake: 0,
+    speedrun: 0
+};
+
+function updateProgressBar() {
+    const totalTasks = 4;
+    const completedTasks = Object.values(progressStatus).reduce((a, b) => a + b, 0);
+    const percentage = Math.round((completedTasks / totalTasks) * 100);
+
+    // UI আপডেট
+    const bar = document.getElementById('globalProgressBar');
+    const text = document.getElementById('globalProgressText');
+    
+    if(bar && text) {
+        bar.style.width = percentage + "%";
+        text.innerText = percentage + "%";
+    }
+
+    // ১০০% হলে বাটন আনলক
+    const nextBtn = document.getElementById('nextLevelBtn'); // বাটনটিতে এই ID টা দিও
+    if (percentage === 100 && nextBtn) {
+        nextBtn.classList.remove('locked-btn');
+        nextBtn.style.opacity = "1";
+        nextBtn.style.pointerEvents = "auto";
+        nextBtn.innerText = "পরবর্তী লেভেলে যাও 🚀";
+    }
+}
+
+// ২. প্রতিটি কাজের ভেতরে এই লাইনগুলো যোগ করো:
+
+// কুইজ বা ধাঁধা দেখলে:
+function revealWarmup() {
+    document.getElementById('warmupAnswer').style.display = 'block';
+    progressStatus.warmup = 1; // কাজ শেষ
+    updateProgressBar();
+}
+
+// কুইজ শেষ হলে (তোমার কুইজ লজিকের শেষে এটি বসাও):
+function completeQuiz() {
+    progressStatus.quiz = 1;
+    updateProgressBar();
+}
+
+// মিস্টেক ফাইন্ডার খেললে:
+function checkMistake(choice) {
+    // তোমার আগের কোড...
+    progressStatus.mistake = 1;
+    updateProgressBar();
+}
+
+// স্পিড রান শেষ করলে:
+function showAndVerify(attempts) {
+    // তোমার আগের কোড...
+    if(attempts.length > 0) {
+        progressStatus.speedrun = 1;
+        updateProgressBar();
+    }
+}
+</script>

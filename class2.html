@@ -1,0 +1,562 @@
+ <title>Class 02: Hardware & Software Adventure</title>
+<style>
+   /* 🌈 GLOBAL VARIABLES */
+:root {
+    --primary: #0081a7;
+    --secondary: #f07167;
+    --accent: #fed9b7;
+    --success: #2d6a4f;
+    --bg-light: #fdf0d5;
+    --card-bg: #ffffff;
+    --text-main: #2d3436;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 🌑 DARK MODE COLORS */
+body.dark-mode {
+    --bg-light: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #e0e0e0;
+    --accent: #3d3d3d;
+}
+
+/* 🛠️ BASE STYLES */
+body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    transition: var(--transition);
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+    position: relative;
+}
+
+/* 📍 MINI CONTROLS (Top Right) */
+.mini-controls {
+    position: fixed; /* স্ক্রল করলেও এক জায়গায় থাকবে */
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.mini-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: var(--transition);
+}
+
+.mini-btn:hover { transform: scale(1.1); }
+
+#voiceToggleBtn.voice-off { background: #fff; color: #64748b; }
+#voiceToggleBtn.voice-on { background: #10b981; color: white; box-shadow: 0 0 15px #10b981; }
+.btn-dark-mini { background: #334155; color: #fbbf24; }
+
+/* 🌟 HEADER & TITLES */
+h1 {
+    text-align: center;
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    transition: var(--transition);
+}
+
+body.dark-mode h1 { color: #00afb9; }
+
+/* 📦 CARD DESIGN */
+.card {
+    background: var(--card-bg);
+    padding: 30px;
+    margin: 25px 0;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border-left: 8px solid var(--primary);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* 🧊 INFO BOXES */
+.flex-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.info-box {
+    flex: 1;
+    min-width: 200px;
+    padding: 20px;
+    border-radius: 18px;
+    background: var(--accent);
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* 🎮 GAME ZONE STYLES */
+.game-area {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.box {
+    flex: 1;
+    min-width: 250px;
+    background: rgba(0,0,0,0.02);
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid #ddd;
+    transition: var(--transition);
+}
+
+body.dark-mode .box { background: rgba(255,255,255,0.05); border-color: #444; }
+
+.item {
+    padding: 12px;
+    margin: 10px 0;
+    background: var(--secondary);
+    color: white;
+    border-radius: 12px;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(240, 113, 103, 0.3);
+}
+
+.item:active { cursor: grabbing; }
+
+.dropzone {
+    min-height: 180px;
+    border: 3px dashed var(--primary);
+    border-radius: 18px;
+    margin-top: 15px;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropzone.over {
+    background: rgba(0, 129, 167, 0.1);
+    transform: scale(1.03);
+    border-style: solid;
+}
+
+/* 🩺 DOCTOR TASK */
+.doctor-task {
+    background: rgba(0,0,0,0.03);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    border-left: 6px solid var(--secondary);
+}
+
+body.dark-mode .doctor-task { background: rgba(255,255,255,0.05); }
+
+/* ⌨️ INPUTS & BUTTONS */
+input {
+    padding: 15px 25px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 30px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    outline: none;
+    transition: var(--transition);
+    background: var(--card-bg);
+    color: var(--text-main);
+}
+
+input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,129,167,0.2); }
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0,129,167,0.2);
+}
+
+button:hover {
+    background: #00afb9;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,129,167,0.3);
+}
+
+/* 🏆 SCORE & FEEDBACK */
+.score-board {
+    font-size: 28px;
+    color: var(--secondary);
+    text-align: center;
+    background: var(--accent);
+    padding: 10px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+}
+
+.feedback { font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+
+/* 🔒 NAVIGATION BUTTONS */
+.btn-next-locked {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* 🎬 ANIMATIONS */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.badge {
+    animation: bounce 2s infinite;
+    padding: 20px;
+    background: var(--success);
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+}
+</style>
+ <div class="mini-controls">
+    <button class="mini-btn voice-off" id="voiceToggleBtn" onclick="toggleVoiceMode()">
+        <span id="voiceIcon">🔇</span> <span id="voiceText">ভয়েস: বন্ধ</span>
+    </button>
+    <button class="mini-btn btn-dark-mini" onclick="toggleDarkMode()">
+        🌙 মোড
+    </button>
+</div>
+
+<div class="container">
+    <header>
+        <h1>🎮 Hardware vs Software</h1>
+    </header>
+
+    <div class="card">
+        <h2>📘 সহজ পাঠ ও বাস্তব উদাহরণ</h2>
+        
+        <div class="flex-container">
+            <div class="info-box" style="background: #d8f3dc; border: 2px solid #b7e4c7;">
+                <h3>💪 Hardware</h3>
+                <p>কম্পিউটারের যে অংশগুলো আমরা <b>ছুঁতে পারি</b>। যেমন: মাউস, কীবোর্ড।</p>
+                <small><i>(আমাদের শরীরের মতো)</i></small>
+            </div>
+            <div class="info-box" style="background: #caf0f8; border: 2px solid #90e0ef;">
+                <h3>🧠 Software</h3>
+                <p>কম্পিউটারের ভেতরকার <b>প্রোগ্রাম</b> যা আমরা ছুঁতে পারি না। যেমন: গেম, উইন্ডোজ।</p>
+                <small><i>(স্মৃতি বা চিন্তার মতো)</i></small>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 25px; color: var(--primary);">🌟 বাস্তব জীবনের সাথে তুলনা</h3>
+        <div class="flex-container">
+            <div class="info-box" style="background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <p>🏃‍♂️ <b>শরীর ও মন:</b><br>হাত-পা হলো হার্ডওয়্যার, আর আমাদের চিন্তা-ভাবনা হলো সফটওয়্যার।</p>
+            </div>
+            <div class="info-box" style="background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <p>🎵 <b>মিউজিক প্লেয়ার:</b><br>মোবাইল ফোনটি হার্ডওয়্যার, কিন্তু ভেতরের গানগুলো হলো সফটওয়্যার।</p>
+            </div>
+            <div class="info-box" style="background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <p>📖 <b>বই ও গল্প:</b><br>কাগজের বইটি হার্ডওয়্যার, আর ভেতরের গল্প বা জ্ঞান হলো সফটওয়্যার।</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 25px; color: var(--primary);">📊 মূল পার্থক্যসমূহ</h3>
+        
+        <div style="overflow-x: auto;">
+            <table style="width:100%; border-collapse: collapse; text-align: left; background: #fff; border-radius: 12px; overflow: hidden;">
+                <tr style="background-color: var(--primary); color: white;">
+                    <th style="padding: 15px; border: 1px solid #ddd;">বৈশিষ্ট্য</th>
+                    <th style="padding: 15px; border: 1px solid #ddd;">হার্ডওয়্যার</th>
+                    <th style="padding: 15px; border: 1px solid #ddd;">সফটওয়্যার</th>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold;">স্পর্শ</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">এটি স্পর্শ করা যায় 🖐️</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">এটি স্পর্শ করা যায় না 🚫</td>
+                </tr>
+                <tr style="background-color: #f9f9f9;">
+                    <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold;">প্রকৃতি</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">ভৌত বা ফিজিক্যাল যন্ত্রাংশ</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">ডিজিটাল প্রোগ্রাম বা কোড</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold;">উদাহরণ</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">মাউস, মনিটর, CPU</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">উইন্ডোজ, ক্রোম, গেমস</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="card toggle-area">
+        <h3>🔄 "Body & Soul" Toggle গেম</h3>
+        <p>বাটন ক্লিক করে হার্ডওয়্যার ও সফটওয়্যারের পার্থক্য দেখো:</p>
+        <div id="humanEmoji" class="human-box">👤</div>
+        <div style="margin-top: 15px;">
+            <button onclick="toggleVisual('hw')">শরীরের অঙ্গ (Hardware)</button>
+            <button onclick="toggleVisual('sw')">বুদ্ধি ও মন (Software)</button>
+        </div>
+        <p id="toggleText" class="feedback"></p>
+    </div>
+
+    <div class="card">
+        <h3>🎯 ড্র্যাগ অ্যান্ড ড্রপ চ্যালেঞ্জ</h3>
+        <div class="score-board">⭐ পয়েন্ট: <span id="score">0</span></div>
+        <p style="text-align:center">নিচের আইটেমগুলো সঠিক বাক্সে টেনে বসাও!</p>
+
+        <div class="game-area">
+            <div class="box">
+                <h4 style="text-align:center">জিনিসপত্র</h4>
+                <div id="items">
+                    <div class="item" draggable="true" id="i1" data-type="hardware">Monitor</div>
+                    <div class="item" draggable="true" id="i2" data-type="software">Chrome</div>
+                    <div class="item" draggable="true" id="i3" data-type="hardware">CPU Box</div>
+                    <div class="item" draggable="true" id="i4" data-type="software">Minecraft</div>
+                    <div class="item" draggable="true" id="i5" data-type="hardware">Printer</div>
+                </div>
+            </div>
+
+            <div class="box">
+                <h4 style="text-align:center; color: var(--secondary)">Hardware (ছুঁতে পারি)</h4>
+                <div class="dropzone" id="hardware"></div>
+            </div>
+
+            <div class="box">
+                <h4 style="text-align:center; color: var(--primary)">Software (ছুঁতে পারি না)</h4>
+                <div class="dropzone" id="software"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🚑 "System Doctor" চ্যালেঞ্জ</h3>
+        <p>সমস্যা দেখে সঠিক চিকিৎসা (Fix) বেছে নাও:</p>
+        <div class="doctor-task">
+            <p>১. "আমার মাউসের তার ছিঁড়ে গেছে।"</p>
+            <button onclick="checkDr(true, 'dr1')">Hardware Fix 🛠️</button>
+            <button onclick="checkDr(false, 'dr1')">Software Fix 💻</button>
+            <span id="dr1" class="feedback"></span>
+        </div>
+        <div class="doctor-task">
+            <p>২. "গেমটি ওপেন হচ্ছে না, মেমোরি ফুল দেখাচ্ছে।"</p>
+            <button onclick="checkDr(false, 'dr2')">Hardware Fix 🛠️</button>
+            <button onclick="checkDr(true, 'dr2')">Software Fix 💻</button>
+            <span id="dr2" class="feedback"></span>
+        </div>
+        <div id="badgeArea" class="badge" style="display:none;">🎖️ অভিনন্দন! তুমি একজন Certified System Doctor!</div>
+    </div>
+
+    <div class="card">
+        <h3>✍️ চটজলদি উত্তর</h3>
+        <p><b>"Paint"</b> বা ছবি আঁকার অ্যাপটি কি হার্ডওয়্যার না কি সফটওয়্যার?</p>
+        <input type="text" id="typeAnswer" oninput="checkTyping()" placeholder="এখানে উত্তর লেখো...">
+        <div id="typeFeedback" class="feedback"></div>
+    </div>
+
+    <div class="card">
+        <h3>🧪 কুইজ টাইম</h3>
+        <p>কম্পিউটার কি সফটওয়্যার ছাড়া চলতে পারবে?</p>
+        <button onclick="quiz(false, 'q1')">হ্যাঁ, পারবে</button>
+        <button onclick="quiz(true, 'q1')">না, পারবে না</button>
+        <div id="q1Feedback" class="feedback"></div>
+    </div>
+
+    <div class="flex-container" style="justify-content: space-between; margin-top: 40px;">
+        <button class="btn-prev" onclick="location.href='#class-1'">⬅️ পূর্ববর্তী ক্লাস</button>
+        <button class="btn-next-locked">🔒 পরবর্তী ক্লাস (লক)</button>
+    </div>
+</div>
+<script>
+
+let score = 0;
+let solvedDr = 0;
+let isVoiceEnabled = false;
+let draggedItem = null;
+
+// --- ১. ভয়েস কন্ট্রোল ইঞ্জিন ---
+function speak(text) {
+    if (!isVoiceEnabled) return;
+    
+    // আগের কোনো ভয়েস চলতে থাকলে তা বন্ধ করা
+    window.speechSynthesis.cancel();
+
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'bn-BD'; // বাংলা ভাষা সেট করা
+    msg.rate = 1.0;     // কথা বলার গতি
+    window.speechSynthesis.speak(msg);
+}
+
+function toggleVoiceMode() {
+    isVoiceEnabled = !isVoiceEnabled;
+    const voiceBtn = document.getElementById('voiceToggleBtn');
+    const voiceIcon = document.getElementById('voiceIcon');
+    const voiceText = document.getElementById('voiceText');
+
+    if (isVoiceEnabled) {
+        voiceBtn.classList.remove('voice-off');
+        voiceBtn.classList.add('voice-on');
+        voiceIcon.innerText = "🔊";
+        voiceText.innerText = "ভয়েস: চালু";
+        speak("ভয়েস মোড চালু হয়েছে। এখন যেকোনো লেখায় ক্লিক করলে আমি তা পড়বো।");
+    } else {
+        voiceBtn.classList.remove('voice-on');
+        voiceBtn.classList.add('voice-off');
+        voiceIcon.innerText = "🔇";
+        voiceText.innerText = "ভয়েস: বন্ধ";
+        window.speechSynthesis.cancel();
+    }
+}
+
+// গ্লোবাল ক্লিক লিসেনার (লেখায় ক্লিক করলে পড়ার জন্য)
+document.addEventListener('click', function (event) {
+    if (!isVoiceEnabled) return;
+    
+    const target = event.target;
+    // বাটন বা ইনপুট বাদে অন্য টেক্সট পড়া
+    if (target.tagName !== 'BUTTON' && target.tagName !== 'INPUT' && target.innerText) {
+        speak(target.innerText);
+    }
+});
+
+// --- ২. ডার্ক মোড লজিক ---
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
+
+// --- ৩. "Body & Soul" ভিজ্যুয়াল গেম ---
+function toggleVisual(type) {
+    const emoji = document.getElementById('humanEmoji');
+    const txt = document.getElementById('toggleText');
+    
+    if(type === 'hw') {
+        emoji.innerText = "💪";
+        emoji.className = "human-box active-hw";
+        txt.innerText = "Hardware: এগুলো কম্পিউটারের শরীর!";
+        speak("হার্ডওয়্যার হলো কম্পিউটারের শরীরের মতো যা দেখা এবং ছোঁয়া যায়।");
+    } else {
+        emoji.innerText = "🧠";
+        emoji.className = "human-box active-sw";
+        txt.innerText = "Software: এগুলো কম্পিউটারের বুদ্ধি!";
+        speak("সফটওয়্যার হলো কম্পিউটারের বুদ্ধি বা চিন্তার মতো যা ছোঁয়া যায় না।");
+    }
+}
+
+// --- ৪. ড্র্যাগ অ্যান্ড ড্রপ চ্যালেঞ্জ ---
+const items = document.querySelectorAll('.item');
+const dropzones = document.querySelectorAll('.dropzone');
+
+items.forEach(item => {
+    item.addEventListener('dragstart', (e) => {
+        draggedItem = item;
+        e.dataTransfer.setData('text', item.id);
+    });
+});
+
+dropzones.forEach(zone => {
+    zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('over');
+    });
+
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+
+    zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('over');
+        const type = draggedItem.getAttribute('data-type');
+
+        if (type === zone.id) {
+            zone.appendChild(draggedItem);
+            score++;
+            document.getElementById('score').innerText = score;
+            draggedItem.style.background = "#2d6a4f";
+            draggedItem.draggable = false;
+            speak("দারুণ! তুমি সঠিক বক্সে রেখেছো।");
+        } else {
+            speak("উফ! এটা তো ভুল বক্স। আবার চেষ্টা করো!");
+            alert("❌ ভুল বক্স! আবার চেষ্টা করো।");
+        }
+        draggedItem = null;
+    });
+});
+
+// --- ৫. সিস্টেম ডক্টর লজিক ---
+function checkDr(isCorrect, id) {
+    const span = document.getElementById(id);
+    if(isCorrect) {
+        span.innerText = " ✅ সঠিক চিকিৎসা!";
+        span.style.color = "green";
+        speak("একদম সঠিক চিকিৎসা!");
+        solvedDr++;
+    } else {
+        span.innerText = " ❌ ভুল হয়েছে!";
+        span.style.color = "red";
+        speak("না, এটি ভুল চিকিৎসা। হার্ডওয়্যার নাকি সফটওয়্যার তা ভালো করে ভাবো।");
+    }
+    
+    if(solvedDr >= 2) {
+        document.getElementById('badgeArea').style.display = "block";
+        speak("অভিনন্দন! তুমি একজন সার্টিফাইড সিস্টেম ডক্টর হয়েছো।");
+    }
+}
+
+// --- ৬. টাইপিং ও কুইজ লজিক ---
+function checkTyping() {
+    const ans = document.getElementById('typeAnswer').value.toLowerCase();
+    const fb = document.getElementById('typeFeedback');
+    
+    if(ans === "software" || ans === "সফটওয়্যার") {
+        fb.innerText = "✅ দারুণ! তুমি ঠিক ধরেছ।";
+        fb.style.color = "green";
+        // একবার সঠিক হলে বারবার ভয়েস আসা বন্ধ করতে পারেন
+    } else if (ans.length > 5) {
+        fb.innerText = "🤔 ভালো করে ভেবে দেখো তো?";
+        fb.style.color = "orange";
+    }
+}
+
+function quiz(correct, id) {
+    const fb = document.getElementById(id + 'Feedback');
+    if(correct) {
+        fb.innerText = "✅ একদম ঠিক! সফটওয়্যার ছাড়া হার্ডওয়্যার প্রাণহীন।";
+        fb.style.color = "green";
+        score += 2;
+        document.getElementById('score').innerText = score;
+        speak("একদম ঠিক! সফটওয়্যার ছাড়া কম্পিউটার কাজই করতে পারবে না।");
+    } else {
+        fb.innerText = "❌ ভুল! সঠিক উত্তরটি হলো: না, পারবে না।";
+        fb.style.color = "red";
+        speak("ভুল হয়েছে। সফটওয়্যার ছাড়া হার্ডওয়্যার শুধুই একটি যন্ত্র, এটি কাজ করতে পারে না।");
+    }
+}
+</script>

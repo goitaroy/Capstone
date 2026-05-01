@@ -1,0 +1,557 @@
+  <style>/* --- ১. ফন্ট এবং গ্লোবাল ভ্যারিয়েবল --- */
+:root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #2d3436;
+    --primary: #0084ff;
+    --secondary: #00b894;
+    --accent: #fdcb6e;
+    --error: #d63031;
+    --progress-bg: #dfe6e9;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --border-radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- ২. ডার্ক মোড কালার স্কিম --- */
+.dark-mode {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --text: #f5f6fa;
+    --primary: #0984ff;
+    --progress-bg: #2d3436;
+    --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* --- ৩. বডি এবং মেইন লেআউট --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: var(--transition);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* --- ৪. প্রগ্রেস বার এবং হেডার ডিজাইন --- */
+.header-section {
+    width: 100%;
+    max-width: 850px;
+    margin-bottom: 30px;
+    background: var(--card);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.progress-wrapper {
+    background: var(--progress-bg);
+    height: 14px;
+    border-radius: 20px;
+    margin: 15px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    box-shadow: 0 0 10px rgba(0, 132, 255, 0.3);
+    transition: width 0.8s ease;
+}
+
+/* --- ৫. আধুনিক কার্ড ডিজাইন --- */
+.edu-card {
+    width: 100%;
+    max-width: 850px;
+    background: var(--card);
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+/* --- ৬. ভিডিও প্লেয়ার ডিজাইন --- */
+.video-container {
+    margin: 30px 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 3px solid var(--primary);
+    background: #000;
+}
+
+/* --- ৭. ড্র্যাগ অ্যান্ড ড্রপ গেমের UX --- */
+/* --- ১. মেইন লেআউট ডিজাইন --- */
+.game-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 20px;
+}
+
+/* --- ২. ড্র্যাগ আইটেম পুল (যেখানে সব অপশন থাকবে) --- */
+.drag-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    box-shadow: inset 0 2px 5px var(--shadow);
+}
+
+.drag-item {
+    background: linear-gradient(135deg, var(--primary), #00a8ff);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: grab;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0, 132, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    user-select: none;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.drag-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 132, 255, 0.3);
+    filter: brightness(1.1);
+}
+
+.drag-item:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+/* --- ৩. ড্রপ জোন ডিজাইন (যেখানে ড্রপ করবে) --- */
+.drop-zones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.drop-box {
+    background: var(--card);
+    border: 2.5px dashed var(--primary);
+    padding: 25px 15px;
+    border-radius: 16px;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ড্র্যাগ করে উপরে আনলে ইফেক্ট */
+.drop-box[drag-over="true"] {
+    background: rgba(0, 132, 255, 0.1);
+    border-style: solid;
+    transform: scale(1.02);
+}
+
+/* আইটেম ড্রপ করার পর স্টাইল */
+.drop-box.filled {
+    border-style: solid;
+    background: rgba(46, 204, 113, 0.05);
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+
+/* --- ৪. রেসপনসিভ ডিজাইন --- */
+@media (max-width: 600px) {
+    .drop-zones {
+        grid-template-columns: 1fr;
+    }
+    
+    .drag-item {
+        width: 45%;
+        text-align: center;
+        padding: 10px;
+    }
+}
+
+/* --- ৫. ডার্ক মোড সাপোর্ট --- */
+.dark-mode .drag-items {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
+.dark-mode .drop-box {
+    background: #1e1e1e;
+    border-color: #0084ff;
+}
+/* --- ৮. এডুবট (EduBot) স্টাইল --- */
+#edubot {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: var(--card);
+    border: 2px solid var(--primary);
+    padding: 20px;
+    border-radius: 25px 25px 25px 5px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+.hidden {
+    transform: translateX(-150%) scale(0);
+    opacity: 0;
+}
+
+/* --- ৯. থিম টগল এবং বাটন --- */
+.theme-toggle {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background: var(--card);
+    border: 2px solid var(--primary);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 4px 10px var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+}
+
+.btn-check {
+    transition: var(--transition);
+}
+
+.btn-check:active {
+    transform: scale(0.98);
+}
+
+/* --- ১০. রেসপনসিভনেস (Mobile Friendly) --- */
+@media (max-width: 600px) {
+    .game-grid {
+        grid-template-columns: 1fr;
+    }
+    .edu-card {
+        padding: 20px;
+    }
+}
+#badge-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999; transition: 0.5s;
+}
+.badge-hidden { visibility: hidden; opacity: 0; transform: scale(0.8); }
+
+.badge-card {
+    background: var(--card);
+    padding: 40px; border-radius: 20px; text-align: center;
+    border: 3px solid var(--accent); box-shadow: 0 0 30px var(--accent);
+}
+.trophy-icon { font-size: 80px; animation: bounce 1s infinite; }
+@keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
+</style>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+    <div class="header-section">
+        <h2>প্রগ্রেস: <span id="percent-text">30</span>%</h2>
+        <div class="progress-wrapper">
+            <div id="progress-fill" class="progress-fill" style="width: 30%;"></div>
+        </div>
+        <p>⭐ XP: <span id="xp-display">0</span></p>
+    </div>
+
+    <div class="edu-card">
+        <h1>ক্লাস ০৩: প্রোগ্রামিং ভাষার জগত 🌍</h1>
+        <p>ভিডিওটি দেখে নিচের কুইজটি সমাধান করো।</p>
+
+        <div class="video-container">
+            <video id="mainVideo" width="100%" controls>
+                <source src="videos/programming_intro.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="pro-tip-box" style="margin-top: 20px; background: rgba(251, 197, 49, 0.1); border-left: 5px solid var(--accent); padding: 15px; border-radius: 8px;">
+    <h4 style="color: #f39c12;">💡 প্রো-টিপ (Expert Insight)</h4>
+    <p id="tip-text" style="font-size: 14px;">লোড হচ্ছে...</p>
+</div>
+
+        <div class="game-grid">
+            <div class="drop-zones">
+                <div class="drop-box" id="zone-python" ondrop="drop(event)" ondragover="allowDrop(event)" data-match="python">
+                    কৃত্রিম বুদ্ধিমত্তা (AI) এখানে আনো
+                </div>
+                <div class="drop-box" id="zone-scratch" ondrop="drop(event)" ondragover="allowDrop(event)" data-match="scratch">
+                    সহজ গেম বানানো এখানে আনো
+                </div>
+            </div>
+
+            <div class="drag-items" id="drag-items-pool">
+    <div class="drag-item" id="python" draggable="true" ondragstart="drag(event)">Python</div>
+    <div class="drag-item" id="scratch" draggable="true" ondragstart="drag(event)">Scratch</div>
+    <div class="drag-item" id="javascript" draggable="true" ondragstart="drag(event)">JavaScript</div>
+    
+    <div class="drag-item" id="cplus" draggable="true" ondragstart="drag(event)">C++</div>
+    <div class="drag-item" id="html" draggable="true" ondragstart="drag(event)">HTML</div>
+</div>
+
+<div class="drop-zones">
+    <div class="drop-box" id="zone-web" ondrop="drop(event)" ondragover="allowDrop(event)" data-match="javascript">
+        ওয়েবসাইট তৈরি এখানে আনো
+    </div>
+    <div class="drop-box" id="zone-game" ondrop="drop(event)" ondragover="allowDrop(event)" data-match="scratch">
+        সহজ গেম বানানো এখানে আনো
+    </div>
+    <div class="drop-box" id="zone-ai" ondrop="drop(event)" ondragover="allowDrop(event)" data-match="python">
+        কৃত্রিম বুদ্ধিমত্তা (AI) এখানে আনো
+    </div>
+</div>
+
+        <div class="button-group" style="margin-top: 20px;">
+            <button class="btn-check" onclick="checkResult()" style="width: 100%; padding: 15px; background: #2ecc71; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer;">
+                ফলাফল চেক করো ✅
+            </button>
+            
+            <button onclick="resetGame()" style="width: 100%; margin-top: 10px; padding: 12px; border: none; border-radius: 12px; cursor: pointer; background: #e0e0e0; color: #333; font-weight: bold;">
+                আবার চেষ্টা করো 🔄
+            </button>
+        </div>
+        
+        <p id="feedback" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+    </div>
+
+    <div id="edubot" class="hidden">
+        <div style="font-size: 40px; margin-right: 10px;">🤖</div>
+        <div>
+            <p id="bot-msg" style="font-size: 14px;"></p>
+            <button onclick="hideBot()" style="font-size: 11px; margin-top: 5px; cursor: pointer;">বুঝতে পেরেছি</button>
+        </div>
+    </div>
+    <div id="badge-container" class="badge-hidden">
+    <div class="badge-card">
+        <div class="confetti"></div>
+        <h1 class="trophy-icon">🏆</h1>
+        <h2>অভিনন্দন, লজিক নিনজা!</h2>
+        <p>তুমি সফলভাবে ক্লাস ০৩ শেষ করে একটি ডিজিটাল ব্যাজ অর্জন করেছো।</p>
+        <button onclick="closeBadge()" class="btn-check">সংগ্রহ করো</button>
+    </div>
+</div>
+
+    <script>
+        let errors = 0; // Scaffolding Trigger-এর জন্য ভুল গণনার ভেরিয়েবল
+
+        function allowDrop(ev) { ev.preventDefault(); }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+    ev.preventDefault();
+    const data = ev.dataTransfer.getData("text");
+    const draggedNode = document.getElementById(data);
+    
+    // টার্গেট এলিমেন্টটি যদি ড্রপ-বক্স হয়
+    if (ev.target.classList.contains('drop-box')) {
+        // ১. বক্সের ভেতর টেক্সট সেট করা
+        ev.target.innerText = draggedNode.innerText;
+        
+        // ২. ইউজার কোন আইডি ড্রপ করেছে তা সেভ করা (ফলাফল চেক করার জন্য)
+        ev.target.setAttribute('data-user-answer', data);
+        
+        // ৩. CSS ক্লাস যোগ করা (যাতে ডিজাইন পরিবর্তন হয়)
+        ev.target.classList.add('filled'); 
+        
+        // ৪. আইটেমটি পুল থেকে সরিয়ে দেওয়া বা হাইড করা
+        draggedNode.style.display = 'none';
+        
+        // ৫. ভয়েস ফিডব্যাক
+        speak(draggedNode.innerText + " সেট করা হয়েছে");
+    }
+}
+
+       function checkResult() {
+    const zones = document.querySelectorAll('.drop-box');
+    const feedback = document.getElementById('feedback');
+    let correctCount = 0;
+    let filledCount = 0;
+    let totalZones = zones.length;
+
+    // ১. প্রতিটি বক্স চেক করা
+    zones.forEach(zone => {
+        const userAnswer = zone.getAttribute('data-user-answer');
+        const correctAnswer = zone.getAttribute('data-match');
+
+        if (userAnswer) {
+            filledCount++; // কয়টি বক্স পূরণ হয়েছে
+            if (userAnswer === correctAnswer) {
+                correctCount++;
+                zone.style.borderColor = "#2ecc71"; // সঠিক হলে সবুজ
+                zone.style.background = "rgba(46, 204, 113, 0.1)";
+            } else {
+                zone.style.borderColor = "#e74c3c"; // ভুল হলে লাল
+                zone.style.background = "rgba(231, 76, 60, 0.1)";
+            }
+        }
+    });
+
+    // ২. সব বক্স পূরণ না করলে ওয়ার্নিং দেওয়া
+    if (filledCount < totalZones) {
+        feedback.innerText = "⚠️ আগে সবগুলো বক্স পূরণ করো!";
+        feedback.style.color = "orange";
+        speak("আগে সবগুলো বক্স পূরণ করো");
+        return;
+    }
+
+    // ৩. ফলাফল যাচাই (সব সঠিক হলে)
+    if (correctCount === totalZones) {
+        feedback.innerText = "🎉 অভিনন্দন! সব উত্তর সঠিক।";
+        feedback.style.color = "#2ecc71";
+        
+        updateUI(100); // প্রগ্রেস আপডেট
+        hideBot(); // এডুবট লুকানো
+        
+        // ব্যাজ ও ট্রফি দেখানো
+        const badge = document.getElementById('badge-container');
+        if(badge) badge.classList.remove('badge-hidden');
+        
+        speak("অভিনন্দন! তুমি লজিক নিনজা ব্যাজ জিতেছো!");
+        
+        // কাস্টম চ্যালেন্জ ও স্পেশাল মেসেজ
+        setTimeout(() => {
+            showBot("অসাধারণ! তুমি তো প্রোগ্রামিং ল্যাঙ্গুয়েজের ওস্তাদ হয়ে গেছো! এবার তোমার জন্য একটি নতুন চ্যালেঞ্জ আসছে।");
+            if (typeof showCustomChallenge === "function") showCustomChallenge();
+        }, 1000);
+
+        errors = 0; // এরর রিসেট
+    } 
+    // ৪. ভুল হলে (Scaffolding Trigger)
+    else {
+        errors++;
+        feedback.innerText = "❌ লজিক মেলেনি! আবার চেষ্টা করো।";
+        feedback.style.color = "#e74c3c";
+
+        if (errors >= 2) {
+            // ২ বার ভুল করলে এডুবট হিন্ট দিবে
+            showBot("হিন্ট: Scratch হলো একটি ব্লক-ভিত্তিক ভাষা যা দিয়ে গেম বানানো সহজ। আর JavaScript দিয়ে ব্রাউজারের কাজ করা হয়!");
+        }
+    }
+}
+        function closeBadge() {
+    document.getElementById('badge-container').classList.add('badge-hidden');
+        }
+
+        // রিসেট মেকানিজম (Reset Mechanism)
+        function resetGame() {
+            const zones = document.querySelectorAll('.drop-box');
+            const items = document.querySelectorAll('.drag-item');
+            
+            // বক্সগুলো রিসেট
+            zones[0].innerText = "কৃত্রিম বুদ্ধিমত্তা (AI) এখানে আনো";
+            zones[1].innerText = "সহজ গেম বানানো এখানে আনো";
+            
+            zones.forEach(zone => {
+                zone.removeAttribute('data-user-answer');
+                zone.style.background = "rgba(0, 132, 255, 0.05)";
+                zone.style.borderColor = "var(--primary)";
+            });
+
+            // ড্র্যাগ আইটেমগুলো ফিরিয়ে আনা
+            items.forEach(item => {
+                item.style.display = 'block';
+            });
+
+            document.getElementById('feedback').innerText = "";
+            hideBot();
+        }
+
+        function updateUI(val) {
+            document.getElementById('progress-fill').style.width = val + "%";
+            document.getElementById('percent-text').innerText = val;
+            document.getElementById('xp-display').innerText = val;
+        }
+
+        function showBot(msg) {
+            const bot = document.getElementById('edubot');
+            document.getElementById('bot-msg').innerText = msg;
+            bot.classList.remove('hidden');
+            speak(msg);
+        }
+
+        function hideBot() {
+            document.getElementById('edubot').classList.add('hidden');
+        }
+
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'bn-BD';
+            window.speechSynthesis.speak(msg);
+        }
+        function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+
+    // ইউজার কোন থিম পছন্দ করেছে তা সেভ করে রাখা
+    if (body.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        console.log("Dark Mode Enabled");
+    } else {
+        localStorage.setItem('theme', 'light');
+        console.log("Light Mode Enabled");
+    }
+}
+
+// পেজ লোড হওয়ার সময় আগের থিম চেক করা
+window.addEventListener('DOMContentLoaded', (event) => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+});
+const tips = [
+    "অ্যাডা লাভলেস ছিলেন পৃথিবীর প্রথম প্রোগ্রামার!",
+    "পাইথন ল্যাঙ্গুয়েজের নাম রাখা হয়েছিল একটি কমেডি শো 'Monty Python' থেকে।",
+    "জাভাস্ক্রিপ্ট মাত্র ১০ দিনে তৈরি করা হয়েছিল!"
+];
+
+function showRandomTip() {
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    document.getElementById('tip-text').innerText = randomTip;
+}
+window.onload = showRandomTip; // পেজ ওপেন করলেই টিপ দেখাবে
+ </script>

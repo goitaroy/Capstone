@@ -1,0 +1,672 @@
+ <title>অধ্যায় ১: কম্পিউটারের জাদু</title>
+    <style>
+        :root {
+            --primary: #005f73;
+            --secondary: #ee9b00;
+            --accent: #94d2bd;
+            --light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 8px;
+            background: #ccc;
+            z-index: 1000;
+        }
+        #progress {
+            height: 100%;
+            width: 15%;
+            background: var(--secondary);
+            transition: width 0.4s;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            margin-bottom: -20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--secondary);
+        }
+
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: #d9480f; }
+
+        /* IPO Section Styles */
+        .ipo-container {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 20px 0;
+            gap: 10px;
+        }
+        .ipo-box {
+            background: var(--accent);
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin: 5px;
+        }
+
+        .btn-audio { background: #0a9396; color: white; }
+        .btn-choice { background: #e7f5ff; border: 2px solid #339af0; color: #1971c2; }
+        .btn-choice:hover { background: #339af0; color: white; }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Comment Section */
+        .comment-box {
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+            padding-top: 15px;
+        }
+        input[type="text"] {
+            width: 75%;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .next-lvl {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+         
+    .map-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;
+        flex-wrap: wrap;
+    }
+
+    .level-card {
+        width: 200px;
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    /* আনলকড বাটন (Active) */
+    .unlocked {
+        background: #0081a7;
+        color: white;
+        border: 3px solid #00afb9;
+    }
+
+    /* লকড বাটন (Disabled) */
+    .locked {
+        background: #e0e0e0;
+        color: #888;
+        cursor: not-allowed;
+        filter: grayscale(1);
+        opacity: 0.7;
+    }
+
+    .level-card .icon { font-size: 40px; margin-bottom: 10px; }
+    .level-card .status { font-size: 12px; margin-top: 10px; font-weight: bold; }
+
+    .level-card:hover.unlocked { transform: scale(1.05); }
+ /* নেভিগেশন বাটন সেকশন ডিজাইন */
+.nav-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.nav-btn {
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* পূর্ববর্তী ক্লাস বাটন */
+.btn-prev {
+    background-color: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-prev:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateX(-5px);
+}
+
+/* পরবর্তী ক্লাস বাটন (লকড অবস্থা) */
+.btn-next-locked {
+    background-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+    border: 2px solid #ccc;
+    opacity: 0.7;
+}
+
+.btn-next-locked i {
+    margin-left: 10px;
+}
+
+/* আইকন স্পেসিং */
+.nav-btn i {
+    font-size: 1.1rem;
+}
+/* Floating Control Panel Style */
+.controls-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1001;
+}
+
+.control-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Voice Button Colors */
+#voiceToggleBtn.voice-off {
+    background: #ffffff;
+    color: #4b5563;
+}
+#voiceToggleBtn.voice-on {
+    background: #10b981;
+    color: white;
+}
+
+/* Dark Mode Button */
+.btn-dark-mode {
+    background: #374151;
+    color: #fbbf24;
+}
+
+/* Improved Dark Mode Colors */
+body.dark-mode {
+    background-color: #111827;
+    color: #f3f4f6;
+}
+body.dark-mode .card {
+    background: #1f2937;
+    color: #e5e7eb;
+    border-top: 5px solid #ee9b00;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+body.dark-mode .control-btn {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+body.dark-mode .ipo-box {
+    background: #065f46;
+    color: #a7f3d0;
+}
+/* ডার্ক মোড বাটনের ডিজাইন */
+.theme-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+}
+/* বাটনগুলোকে ছোট করে এক কোণায় রাখার জন্য */
+.mini-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+}
+
+.mini-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 11px; /* ছোট ফন্ট */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ভয়েস বাটনের কালার */
+#voiceToggleBtn.voice-off {
+    background: #f1f5f9;
+    color: #64748b;
+}
+#voiceToggleBtn.voice-on {
+    background: #10b981;
+    color: white;
+}
+
+/* ডার্ক মোড ছোট বাটন */
+.btn-dark-mini {
+    background: #334155;
+    color: #fbbf24;
+}
+
+/* টাইটেল কার্ডে পজিশন ঠিক রাখা */
+.header {
+    position: relative; /* এটি যোগ করা জরুরি */
+    padding-top: 45px; /* বাটনের জন্য জায়গা */
+}
+/* Progress Bar Style */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: #ccc;
+            z-index: 2000;
+        }
+        #progress {
+            height: 100%;
+            width: 0%; /* শুরুতে ০% থাকবে */
+            background: var(--secondary);
+            transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 10px rgba(238, 155, 0, 0.7);
+        }
+    </style>
+ <div class="progress-container">
+        <div id="progress"></div>
+    </div>
+<div class="header">
+    <div class="mini-controls">
+        <button class="mini-btn voice-off" id="voiceToggleBtn" onclick="toggleVoiceMode()">
+            <span id="voiceIcon">🔇</span> <span id="voiceText">ভয়েস</span>
+        </button>
+
+        <button class="mini-btn btn-dark-mini" onclick="toggleDarkMode()">
+            🌙 মোড
+        </button>
+    </div>
+
+    <h1>🖥️ কম্পিউটার পরিচিতি (অধ্যায় ১)</h1>
+    <p>সহজ ভাষায় শেখার শুরু এখানেই!</p>
+</div>
+
+   <div class="card">
+    <h2>📘 কম্পিউটার আসলে কী?</h2>
+    
+    <p id="text1">কম্পিউটার হলো একটি অত্যন্ত দ্রুতগামী ইলেকট্রনিক যন্ত্র। এটি নিজে নিজে কিছু করতে পারে না, আমরা তাকে যে নির্দেশ দেই, সে অনুযায়ী সে কাজ করে।</p>
+    
+    <div class="ipo-container">
+        <div class="ipo-box">📥 ইনপুট<br><small>(তথ্য দেওয়া)</small></div>
+        <div class="ipo-box">⚙️ প্রসেসিং<br><small>(কাজ করা)</small></div>
+        <div class="ipo-box">📤 আউটপুট<br><small>(ফলাফল)</small></div>
+    </div>
+
+<div class="card">
+    <h3>🎬 ভিডিওতে শিখি</h3>
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px;">
+        <iframe 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+            src="https://www.youtube.com/embed/Sce63-rR_qY" 
+            title="Computer Introduction" 
+            allowfullscreen>
+        </iframe>
+    </div>
+    <p style="text-align: center; margin-top: 10px; font-style: italic;">অ্যানিমেশনটি দেখে কম্পিউটারের কাজ বুঝে নাও!</p>
+</div>
+
+    <div class="card">
+        <h3>🎮 ছোট একটি পরীক্ষা</h3>
+        <p>নিচের কোনটি কম্পিউটারের <b>মস্তিষ্ক (Brain)</b> বলা হয়?</p>
+        <button class="btn btn-choice" onclick="checkAnswer(false, 'quiz1')">Monitor</button>
+        <button class="btn btn-choice" onclick="checkAnswer(true, 'quiz1')">CPU</button>
+        <button class="btn btn-choice" onclick="checkAnswer(false, 'quiz1')">Keyboard</button>
+        <div id="quiz1-feedback" class="feedback"></div>
+    </div>
+
+    <div class="card">
+        <h2>🚀 কম্পিউটার কেন স্পেশাল?</h2>
+        <ul>
+            <li><b>গতি:</b> সেকেন্ডের মধ্যে লক্ষ লক্ষ হিসাব করতে পারে।</li>
+            <li><b>স্মৃতি:</b> অনেক তথ্য ভুলে না গিয়ে মনে রাখতে পারে।</li>
+            <li><b>নির্ভুলতা:</b> কম্পিউটার কখনো নিজের থেকে ভুল করে না।</li>
+        </ul>
+    </div>
+    <div class="card" id="activityCard">
+        <h3>🎮 Mystery Mission</h3>
+        <p>নিচের কোন কাজটি কম্পিউটার <b>করতে পারে না (CANNOT)</b>?</p>
+        <button class="btn btn-choice" onclick="checkActivity(false, this)">Type Homework</button>
+        <button class="btn btn-choice" onclick="checkActivity(true, this)">Taste a Mango</button>
+        <button class="btn btn-choice" onclick="checkActivity(false, this)">Send Email</button>
+        <div id="actFeedback" class="feedback"></div>
+    </div>
+
+    <div class="card">
+        <h3>🧪 Quick Check</h3>
+        <p>কম্পিউটার কি কোনো জীবন্ত বস্তু (Living thing)?</p>
+        <button class="btn btn-choice" onclick="checkQuiz(false, this)">হ্যাঁ, এটা জীবন্ত!</button>
+        <button class="btn btn-choice" onclick="checkQuiz(true, this)">না, এটি একটি মেশিন।</button>
+        <div id="quizFeedback" class="feedback"></div>
+    </div>
+    <div class="card">
+        <h3>💬 তোমার মতামত</h3>
+        <p>কম্পিউটার দিয়ে তুমি ভবিষ্যতে কী করতে চাও? নিচে লিখে জানাও:</p>
+        <div class="comment-box">
+            <input type="text" id="userInput" placeholder="এখানে লেখো...">
+            <button class="btn btn-audio" onclick="postComment()">পোস্ট করো</button>
+            <div id="postArea" style="margin-top:15px; font-style: italic; color: #555;"></div>
+        </div>
+    </div>
+
+     <div class="nav-buttons-container">
+    <a href="index.html" class="nav-btn btn-prev">
+        <i class="fas fa-chevron-left" style="margin-right: 10px;"></i> 
+        কোর্স ম্যাপে ফেরো
+    </a>
+
+    <a href="class2.html" id="nextBtn" class="nav-btn btn-next-locked">
+        পরবর্তী ক্লাস (০২) 
+        <i class="fas fa-lock"></i>
+    </a>
+</div>
+</div>
+<script>
+let currentProgress = 0;
+    let quiz1Done = false;
+    let quiz2Done = false;
+let score = 15;
+
+let voices = [];
+let isVoiceEnabled = false; // শুরুতে ভয়েস বন্ধ থাকবে
+
+// ১. ভয়েস লোড করা
+function loadVoices() {
+    voices = window.speechSynthesis.getVoices();
+}
+if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+loadVoices();
+
+function toggleVoiceMode() {
+    isVoiceEnabled = !isVoiceEnabled;
+    const voiceBtn = document.getElementById('voiceToggleBtn');
+    const voiceIcon = document.getElementById('voiceIcon');
+    const voiceText = document.getElementById('voiceText');
+    
+    if (isVoiceEnabled) {
+        // Voice ON State
+        voiceBtn.classList.remove('voice-off');
+        voiceBtn.classList.add('voice-on');
+        voiceIcon.innerText = "🔊";
+        voiceText.innerText = "ভয়েস মোড: চালু";
+        speak("ভয়েস মোড চালু হয়েছে। এখন যেকোনো টেক্সটে ক্লিক করলে আমি তা পড়বো।");
+    } else {
+        // Voice OFF State
+        voiceBtn.classList.remove('voice-on');
+        voiceBtn.classList.add('voice-off');
+        voiceIcon.innerText = "🔇";
+        voiceText.innerText = "ভয়েস মোড: বন্ধ";
+        window.speechSynthesis.cancel();
+    }
+}
+
+// আপনার বাকি speak এবং global click লজিকগুলো আগের মতোই থাকবে।
+
+// ৩. মূল কথা বলার ফাংশন
+function speak(text) {
+    if (!isVoiceEnabled) return; // যদি ভয়েস মোড অফ থাকে তবে কাজ করবে না
+    
+    window.speechSynthesis.cancel();
+    if (!text || text.trim().length === 0) return;
+
+    const msg = new SpeechSynthesisUtterance(text);
+    let selectedVoice = voices.find(v => v.lang === 'bn-BD' || v.lang === 'bn-IN');
+    
+    if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.includes('en'));
+    }
+
+    if (selectedVoice) {
+        msg.voice = selectedVoice;
+        msg.lang = selectedVoice.lang;
+    }
+
+    msg.rate = 1.0;
+    window.speechSynthesis.speak(msg);
+}
+
+// ৪. গ্লোবাল ক্লিক লিসেনার
+document.addEventListener('click', function (event) {
+    if (!isVoiceEnabled) return;
+
+    const target = event.target;
+    // বাটন, ইনপুট এবং আইফ্রেম বাদ দিয়ে বাকি সব টেক্সট পড়বে
+    if (target.tagName !== 'INPUT' && target.tagName !== 'BUTTON' && target.tagName !== 'IFRAME') {
+        const textToRead = target.innerText || target.textContent;
+        if (textToRead && textToRead.length < 500) {
+            speak(textToRead);
+        }
+    }
+});
+// ৩. ডার্ক মোড ফাংশন
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
+
+// ৩. কুইজ ও প্রোগ্রেস লজিক
+    function checkAnswer(isCorrect, id) {
+        const feedback = document.getElementById(id + '-feedback');
+        feedback.style.display = "block";
+
+        if (isCorrect) {
+            feedback.innerHTML = "✅ সঠিক উত্তর!";
+            feedback.style.background = "#d3f9d8";
+            speak("চমৎকার! আপনার উত্তর সঠিক হয়েছে।");
+            
+            // এক কুইজের জন্য একবারই প্রোগ্রেস বাড়বে
+            if(id === 'quiz1' && !quiz1Done) { quiz1Done = true; updateProgress(50); }
+            if(id === 'quiz2' && !quiz2Done) { quiz2Done = true; updateProgress(50); }
+        } else {
+            feedback.innerHTML = "❌ আবার চেষ্টা করো।";
+            feedback.style.background = "#fff5f5";
+            speak("ভুল হয়েছে, আবার চেষ্টা করুন।");
+        }
+    }
+    function updateProgress(amount) {
+        currentProgress += amount;
+        if(currentProgress > 100) currentProgress = 100;
+
+        // বার আপডেট
+        document.getElementById('progress').style.width = currentProgress + "%";
+
+        // আনলক লজিক (৮০% এর বেশি হলে)
+        if (currentProgress >= 80) {
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.remove('btn-next-locked');
+            nextBtn.classList.add('btn-next-unlocked');
+            nextBtn.innerHTML = 'পরবর্তী ক্লাস (০২) 🔓';
+            speak("অভিনন্দন! পরবর্তী লেভেল আনলক হয়েছে।");
+            
+            // ব্রাউজারে সেভ করে রাখা যেন রিফ্রেশ করলে লক না হয়ে যায়
+            localStorage.setItem("level1_completed", "true");
+        }
+    }
+
+    // পেজ লোড হলে আগের প্রোগ্রেস চেক (Optional)
+    window.onload = function() {
+        if(localStorage.getItem("level1_completed") === "true") {
+            updateProgress(100);
+        }
+    }
+
+// ৫. অ্যাক্টিভিটি চেক (ভয়েস সহ)
+function checkActivity(isCorrect, btn) {
+    let feedback = document.getElementById("actFeedback");
+    feedback.style.display = "block";
+    if(isCorrect) {
+        feedback.innerHTML = "✅ সঠিক! কম্পিউটার আম খেতে পারে না! 😂";
+        feedback.style.background = "#d3f9d8";
+        feedback.style.color = "#2b8a3e";
+        speak("একদম ঠিক! কম্পিউটার আম খেতে পারে না।");
+        updateProgress(15);
+    } else {
+        feedback.innerHTML = "❌ ভুল! কম্পিউটার এই কাজটা অনায়াসেই করতে পারে।";
+        feedback.style.background = "#fff5f5";
+        feedback.style.color = "#c92a2a";
+        speak("উফ! ভুল হয়েছে।");
+    }
+}
+
+// ৬. কুইজ ২ চেক (ভয়েস সহ)
+function checkQuiz(isCorrect, btn) {
+    let feedback = document.getElementById("quizFeedback");
+    feedback.style.display = "block";
+    if(isCorrect) {
+        feedback.innerHTML = "🌟 একদম ঠিক! এটি একটি জড় পদার্থ বা ইলেকট্রনিক মেশিন।";
+        feedback.style.background = "#d3f9d8";
+        feedback.style.color = "#2b8a3e";
+        speak("সাবাশ! এটি একটি ইলেকট্রনিক মেশিন।");
+        updateProgress(15);
+    } else {
+        feedback.innerHTML = "😅 না বন্ধু! কম্পিউটারের আমাদের মতো প্রাণ নেই।";
+        feedback.style.background = "#fff5f5";
+        feedback.style.color = "#c92a2a";
+        speak("না বন্ধু, কম্পিউটারের প্রাণ নেই।");
+    }
+}
+
+// ৭. প্রোগ্রেস আপডেট
+function updateProgress(amt) {
+    score += amt;
+    if(score > 100) score = 100;
+    document.getElementById('progress').style.width = score + "%";
+    
+    if(score >= 40) {
+        let nextBtn = document.getElementById('nextBtn');
+        if(nextBtn) {
+            nextBtn.classList.remove('btn-next-locked');
+            nextBtn.style.background = "var(--primary)";
+            nextBtn.style.color = "white";
+            nextBtn.style.cursor = "pointer";
+            nextBtn.innerHTML = 'পরবর্তী ক্লাস (০২) <i class="fas fa-chevron-right"></i>';
+        }
+    }
+}
+
+// ৮. কমেন্ট পোস্ট
+function postComment() {
+    const val = document.getElementById('userInput').value;
+    if(val) {
+        document.getElementById('postArea').innerHTML = "📌 তুমি লিখেছ: " + val;
+        document.getElementById('userInput').value = "";
+        updateProgress(10);
+        speak("তোমার মতামত জমা হয়েছে। সাবাশ!");
+        alert("সাবাশ! তোমার মতামত জমা হয়েছে।");
+    }
+}
+
+// ৯. পেজ লোড প্রোগ্রেস চেক
+window.onload = function() {
+    checkProgress();
+};
+
+function checkProgress() {
+    let completedLevel = localStorage.getItem("userProgress") || 1;
+    for (let i = 2; i <= 3; i++) {
+        let card = document.getElementById('lvl' + i);
+        if (card && completedLevel >= i) {
+            card.classList.remove('locked');
+            card.classList.add('unlocked');
+            card.querySelector('.icon').innerText = "📂";
+            card.querySelector('.status').innerText = "চালু হয়েছে";
+        }
+    }
+}
+
+function unlockNextLevel(currentLvl) {
+    localStorage.setItem("userProgress", 2);
+}
+
+function finishLevel() {
+    if(score >= 40) {
+        unlockNextLevel(1); 
+        speak("অভিনন্দন! তুমি অধ্যায় এক সফলভাবে শেষ করেছ।");
+        alert("🎉 অভিনন্দন! তুমি অধ্যায় ১ সফলভাবে শেষ করেছ।");
+        window.location.href = "course_map.html"; 
+    } else {
+        speak("আগে কুইজ এবং মতামত সেকশনটি পূরণ করো।");
+        alert("❗ তোমার প্রোগ্রেস এখনো কম। আগে সব টাস্ক পূরণ করো!");
+    }
+}
+</script>

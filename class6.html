@@ -1,0 +1,337 @@
+  
+    <title>Class 06 - Typing Hero Quest</title>
+    <style>
+        :root {
+            --primary: #4834d4;
+            --secondary: #686de0;
+            --success: #6ab04c;
+            --danger: #eb4d4b;
+            --dark: #130f40;
+            --bg: #f5f6fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #686de0 0%, #4834d4 100%);
+            margin: 0;
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        .container { width: 95%; max-width: 1000px; margin: 20px auto; }
+
+        /* Header Styles */
+        .header { text-align: center; color: white; margin-bottom: 20px; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 5px; }
+
+        /* Main Game Card */
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            min-height: 500px;
+            position: relative;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 12px 20px; border: none; border-radius: 12px;
+            background: #dff9fb; color: var(--primary); font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+        }
+        .tab-btn.active { background: var(--primary); color: white; transform: translateY(-3px); }
+
+        .view-section { display: none; animation: slideUp 0.4s ease; }
+        .view-section.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- 1. Vanishing Word Area --- */
+        #word-lane {
+            height: 350px; background: #2d3436; border-radius: 15px;
+            position: relative; overflow: hidden; margin-bottom: 15px;
+            border-bottom: 10px solid var(--danger); /* Lava pit */
+        }
+        .falling-word {
+            position: absolute; color: white; background: var(--primary);
+            padding: 5px 15px; border-radius: 20px; font-weight: bold;
+            font-size: 1.2rem; white-space: nowrap; transition: top 0.1s linear;
+        }
+
+        /* --- 2. Decoder Area --- */
+        .decoder-box {
+            background: #000; color: #00ff00; padding: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.8rem; border-radius: 15px; margin-bottom: 20px;
+            letter-spacing: 5px;
+        }
+
+        /* --- 3. ID Card Area --- */
+        #id-card-result {
+            width: 350px; height: 200px; background: white; margin: 20px auto;
+            border-radius: 15px; border: 2px dashed var(--primary);
+            display: none; padding: 20px; text-align: left;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Input Styles */
+        .typing-input {
+            width: 80%; padding: 15px; font-size: 1.5rem; border-radius: 12px;
+            border: 3px solid #ddd; outline: none; transition: 0.3s;
+            text-align: center;
+        }
+        .typing-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(104, 109, 224, 0.3); }
+        .error-shake { animation: shake 0.2s; border-color: var(--danger) !important; color: var(--danger); }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+        /* Progress Bar */
+        .progress-wrapper { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 20px 0; overflow: hidden; }
+        #progress-fill { width: 0%; height: 100%; background: var(--success); transition: 0.3s; }
+
+        .hint { margin-top: 10px; font-size: 0.9rem; color: #666; font-weight: bold; }
+        .action-btn { background: var(--primary); color: white; padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
+    </style>
+
+<div class="container">
+  <div id="tutorial" class="view-section">
+    <div style="text-align: left; padding: 20px; line-height: 1.6;">
+        <h2 style="color: var(--primary); border-bottom: 2px solid #ddd;">⌨️ টাইপিংয়ের মূল ভিত্তি (Basics)</h2>
+        
+        <div style="background: #f1f2f6; padding: 15px; border-radius: 10px; margin: 10px 0;">
+            <h3>🏠 Home Row (হোম রো)</h3>
+            <p>টাইপিংয়ের সময় আঙুলগুলো সবসময় এই সারিতে বিশ্রাম নেবে:</p>
+            <ul>
+                <li><strong>বাম হাত:</strong> A, S, D, F</li>
+                <li><strong>ডান হাত:</strong> J, K, L, ;</li>
+                <li><strong>বুড়ো আঙুল:</strong> Spacebar</li>
+            </ul>
+        </div>
+        
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: #e1f5fe; padding: 15px; border-radius: 10px;">
+                <h3>🧘 Posture (ভঙ্গি)</h3>
+                <p>সোজা হয়ে বসো, কনুই থাকবে ৯০° কোণে এবং স্ক্রিন থাকবে চোখের সমান উচ্চতায়।</p>
+            </div>
+            
+
+[Image of correct typing posture at computer]
+
+            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px;">
+                <h3>🧠 Muscle Memory</h3>
+                <p>কিবোর্ডের দিকে না তাকিয়ে স্ক্রিনের দিকে তাকিয়ে টাইপ করার অভ্যাস করো।</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 20px;">🗂️ কিবোর্ডের প্রকারভেদ</h3>
+        <table style="width: 100%; border-collapse: collapse; background: white;">
+            <tr style="background: var(--primary); color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd;">গ্রুপ</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">উদাহরণ</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Alphanumeric</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">A-Z, 0-9</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Special Characters</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">!, @, #, $, %</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd;">Modifier Keys</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Shift, Ctrl, Alt</td>
+            </tr>
+        </table>
+    </div>
+</div>
+    <div class="header">
+        <h1>⌨️ Typing Hero Quest</h1>
+        <p>কিবোর্ডের রাজা হওয়ার মিশনে তোমাকে স্বাগতম!</p>
+    </div>
+
+    <div class="game-container">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchView('rescue')">🚀 Word Rescue</button>
+            <button class="tab-btn" onclick="switchView('decoder')">🕵️ Secret Decoder</button>
+            <button class="tab-btn" onclick="switchView('idcard')">🪪 ID Generator</button>
+            <button class="tab-btn" onclick="switchView('jokes')">🤣 Joke-a-Thon</button>
+        </div>
+
+        <div class="progress-wrapper"><div id="progress-fill"></div></div>
+
+        <div id="rescue" class="view-section active">
+            <h3>লাভা গর্তে পড়ার আগে শব্দটি টাইপ করো!</h3>
+            <div id="word-lane"></div>
+            <input type="text" id="rescue-input" class="typing-input" placeholder="এখানে টাইপ করো..." autofocus>
+            <div class="controls" style="margin-top: 15px;">
+                <button class="action-btn" onclick="startGame()">মিশন শুরু করো</button>
+            </div>
+        </div>
+
+        <div id="decoder" class="view-section">
+            <h3>স্পেশাল কোডটি ডিকোড করো!</h3>
+            <div class="decoder-box" id="code-display">!@#$123</div>
+            <input type="text" id="decoder-input" class="typing-input" placeholder="কোডটি দেখে দেখে লেখো...">
+            <p class="hint" id="decoder-hint"></p>
+        </div>
+
+        <div id="idcard" class="view-section">
+            <h3>তোমার ডিজিটাল আইডি কার্ড তৈরি করো (Shift ব্যবহার করো)</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                <input type="text" id="id-name" class="typing-input" style="font-size: 1rem;" placeholder="তোমার নাম (বড় হাতের অক্ষরে)">
+                <input type="text" id="id-school" class="typing-input" style="font-size: 1rem;" placeholder="তোমার স্কুলের নাম">
+            </div>
+            <button class="action-btn" style="margin-top: 20px;" onclick="generateID()">কার্ড তৈরি করো</button>
+            
+            <div id="id-card-result">
+                <h4 style="margin:0; color:var(--primary);">TYPING NINJA ID</h4>
+                <hr>
+                <p><strong>নাম:</strong> <span id="res-name"></span></p>
+                <p><strong>স্কুল:</strong> <span id="res-school"></span></p>
+                <p><strong>Rank:</strong> <span style="color: var(--success); font-weight: bold;">Keyboard King 👑</span></p>
+            </div>
+        </div>
+
+        <div id="jokes" class="view-section">
+            <h3>মজার জোকস টাইপ করো!</h3>
+            <div class="decoder-box" style="background: #f1f2f6; color: #333; font-size: 1.2rem; text-align: left;" id="joke-setup">
+                Setup: মুরগি কেন রাস্তা পার হলো?
+            </div>
+            <input type="text" id="joke-input" class="typing-input" placeholder="অপেক্ষা করো...">
+            <div id="joke-punchline" style="margin-top: 20px; font-size: 1.5rem; color: var(--primary); font-weight: bold; display: none;">
+                উত্তর: কারণ রাস্তার ওই পাশে তার 'টাইপিং ক্লাস' ছিল! 😂
+            </div>
+            <div class="hint" id="joke-error-hint"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const progressFill = document.getElementById('progress-fill');
+    
+    function switchView(id) {
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+        if(id === 'decoder') startDecoder();
+        if(id === 'jokes') startJokes();
+    }
+
+    // --- 1. Word Rescue Logic ---
+    let words = ['Apple', 'Banana', 'Cat', 'Computer', 'Hero', 'Robot', 'Magic', 'Ninja', 'Zoom', 'Bangladesh'];
+    let gameInterval;
+    function startGame() {
+        const lane = document.getElementById('word-lane');
+        const input = document.getElementById('rescue-input');
+        input.value = '';
+        input.focus();
+        
+        let wordObj = {
+            text: words[Math.floor(Math.random() * words.length)],
+            top: 0
+        };
+
+        const div = document.createElement('div');
+        div.className = 'falling-word';
+        div.innerText = wordObj.text;
+        div.style.left = Math.random() * 70 + '%';
+        lane.appendChild(div);
+
+        gameInterval = setInterval(() => {
+            wordObj.top += 2;
+            div.style.top = wordObj.top + 'px';
+
+            if(wordObj.top > 310) {
+                clearInterval(gameInterval);
+                div.remove();
+                alert("ওহ নো! শব্দটি লাভায় পড়ে গেছে। আবার চেষ্টা করো।");
+            }
+        }, 30);
+
+        input.oninput = () => {
+            if(input.value.toLowerCase() === wordObj.text.toLowerCase()) {
+                clearInterval(gameInterval);
+                div.remove();
+                progressFill.style.width = '25%';
+                input.value = '';
+                alert("সাবাশ! তুমি শব্দটিকে উদ্ধার করেছ।");
+            }
+        };
+    }
+
+    // --- 2. Decoder Logic ---
+    const codes = ['!@#$123', '%^&*99', '#Hero101', 'Admin@2026', 'Shift!Plus'];
+    function startDecoder() {
+        const display = document.getElementById('code-display');
+        const input = document.getElementById('decoder-input');
+        const hint = document.getElementById('decoder-hint');
+        let currentCode = codes[0];
+        display.innerText = currentCode;
+
+        input.oninput = () => {
+            const val = input.value;
+            if(val !== currentCode.substring(0, val.length)) {
+                input.classList.add('error-shake');
+                hint.innerText = "ভুল কী! চেক করো 'Caps Lock' অন আছে কি না।";
+                setTimeout(() => input.classList.remove('error-shake'), 300);
+            } else {
+                hint.innerText = "";
+            }
+
+            if(val === currentCode) {
+                progressFill.style.width = '50%';
+                alert("কোড ডিকোড হয়েছে! তুমি একজন প্রো এজেন্ট।");
+            }
+        };
+    }
+
+    // --- 3. ID Generator ---
+    function generateID() {
+        const name = document.getElementById('id-name').value;
+        const school = document.getElementById('id-school').value;
+        if(name && school) {
+            document.getElementById('res-name').innerText = name;
+            document.getElementById('res-school').innerText = school;
+            document.getElementById('id-card-result').style.display = 'block';
+            progressFill.style.width = '75%';
+        } else {
+            alert("নাম এবং স্কুলের নাম দুটোই টাইপ করো!");
+        }
+    }
+
+    // --- 4. Joke-a-Thon ---
+    const jokes = [
+        { q: "কিবোর্ডের সবথেকে প্রিয় খাবার কী?", a: "চিপস (Chips)!" },
+        { q: "কম্পিউটার কেন চশমা পরে?", a: "কারণ তার 'আই-প্যাড' নেই!" }
+    ];
+    function startJokes() {
+        const setup = document.getElementById('joke-setup');
+        const input = document.getElementById('joke-input');
+        const punch = document.getElementById('joke-punchline');
+        const jokeError = document.getElementById('joke-error-hint');
+        
+        let currentJoke = jokes[0];
+        setup.innerText = "প্রশ্ন: " + currentJoke.q;
+        input.placeholder = "পুরো প্রশ্নটি এখানে টাইপ করো...";
+
+        input.oninput = () => {
+            if(input.value !== currentJoke.q.substring(0, input.value.length)) {
+                jokeError.innerText = "সঠিক স্পেলিং দেখো!";
+                input.classList.add('error-shake');
+                setTimeout(() => input.classList.remove('error-shake'), 300);
+            } else {
+                jokeError.innerText = "";
+            }
+
+            if(input.value === currentJoke.q) {
+                punch.innerText = "উত্তর: " + currentJoke.a;
+                punch.style.display = 'block';
+                progressFill.style.width = '100%';
+            }
+        };
+    }
+</script>
+
+ 

@@ -1,0 +1,449 @@
+ <!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Explorer - Class 6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --dark: #1e293b;
+            --bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        h2 { color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
+
+        /* Lab Components */
+        .lab-input {
+            width: 100%; padding: 12px; border: 2px solid #cbd5e1;
+            border-radius: 10px; font-size: 16px; box-sizing: border-box;
+        }
+
+        .result-box {
+            margin-top: 15px; padding: 15px; background: #e0f2fe;
+            border-radius: 10px; font-weight: bold; color: var(--primary);
+        }
+
+        button {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 25px; border-radius: 10px; cursor: pointer;
+            font-size: 16px; font-weight: 600; transition: 0.3s;
+        }
+
+        button:hover { background: var(--secondary); transform: scale(1.05); }
+
+        /* Map Game Styles */
+        .map-ocean {
+            background: #1e3a8a; height: 350px; position: relative;
+            border-radius: 15px; overflow: hidden; border: 4px solid #334155;
+        }
+        .wave {
+            position: absolute; width: 200%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1; animation: oceanMove 20s linear infinite;
+        }
+        @keyframes oceanMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        .station { position: absolute; cursor: pointer; text-align: center; z-index: 10; transition: 0.3s; }
+        .station .flag { font-size: 30px; display: block; }
+        .station .label { color: white; font-size: 12px; font-weight: bold; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px; }
+
+        .map-svg { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+        .status-bar { background: #334155; color: white; padding: 15px; text-align: center; border-radius: 0 0 15px 15px; }
+
+        /* Chat Styles */
+        .chat-container { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; gap: 10px; }
+        .device { width: 130px; text-align: center; }
+        .screen { height: 180px; background: #f1f5f9; border: 8px solid #334155; border-radius: 20px; overflow-y: auto; }
+        .chat-header { background: #334155; color: white; font-size: 11px; padding: 5px; }
+        .msg-box { padding: 5px; display: flex; flex-direction: column; gap: 5px; }
+        .bubble { background: var(--primary); color: white; padding: 6px; border-radius: 8px; font-size: 11px; animation: pop 0.3s ease; }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+        .server { padding: 20px; border-radius: 15px; background: #1f2937; color: white; text-align: center; }
+        .server.processing { animation: pulse 0.5s infinite; border: 2px solid var(--success); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Timeline Styles */
+        .timeline-display { height: 250px; background: #000; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 20px; }
+        .evolution-slide { display: none; text-align: center; padding: 20px; }
+        .evolution-slide.active { display: block; animation: fadeIn 0.8s; }
+        .retro-web { font-family: monospace; color: #00ff00; text-align: left; }
+        .timeline-controls { display: flex; justify-content: space-between; padding: 10px; background: #eee; border-radius: 30px; }
+        .time-point { cursor: pointer; padding: 10px 15px; border-radius: 20px; font-weight: bold; background: white; }
+        .time-point:hover { background: var(--primary); color: white; }
+
+        /* Slider Styles */
+        .scenario-box { height: 150px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 20px; transition: 0.5s; }
+        .no-internet { background: #64748b; }
+        .with-internet { background: #0ea5e9; }
+        .impact-slider { width: 100%; margin: 20px 0; }
+
+        /* Domain Table */
+        .domain-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .domain-table th, .domain-table td { border: 1px solid #e2e8f0; padding: 15px; text-align: left; }
+        .domain-table th { background: #f8fafc; color: var(--primary); }
+
+        /* Speed Gauge */
+        .speed-gauge { width: 200px; height: 100px; background: #eee; border-radius: 100px 100px 0 0; position: relative; margin: 20px auto; overflow: hidden; }
+        .needle { width: 4px; height: 80px; background: red; position: absolute; bottom: 0; left: 50%; transform-origin: bottom; transition: 2s; transform: rotate(-90deg); }
+
+        /* Packets */
+        .network-track { height: 60px; background: #f1f5f9; border: 2px dashed #cbd5e1; position: relative; margin: 20px 0; border-radius: 10px; }
+        .packet { position: absolute; font-size: 24px; left: 0; top: 10px; display: none; }
+
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        @media (max-width: 600px) { .chat-container { flex-direction: column; } .quiz-options { grid-template-columns: 1fr; } }
+       /* যুগ অনুযায়ী ফিল্টার */
+.era-90s { filter: sepia(0.8) contrast(1.2); font-family: 'Courier New', monospace; }
+.era-00s { filter: saturate(1.5); }
+.era-now { filter: none; background: #121212; color: white; border-radius: 10px; padding: 20px; }
+
+/* ইমেজ লোডিং ইফেক্ট (Line by line) */
+.image-load-container { position: relative; width: 144px; margin: 0 auto; overflow: hidden; }
+#image-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; transition: height 3s linear;
+}
+
+/* প্রগ্রেস বার */
+.progress-wrapper { width: 100%; height: 5px; background: #ddd; margin-bottom: 15px; }
+.progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.5s; }
+
+/* এআই এনিমেশন */
+.ai-circle {
+    width: 60px; height: 60px; border: 4px solid #00f2fe; border-radius: 50%;
+    margin: 0 auto; animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🌐 ইন্টারনেট এর দুনিয়া (Class 6)</h1>
+    <p>ইন্টারনেট কীভাবে কাজ করে তা হাতে-কলমে শিখি!</p>
+</header>
+
+<div class="container">
+    
+    <section class="card">
+        <h2>১. ইন্টারনেট কী?</h2>
+        <p>ইন্টারনেট হলো পৃথিবীর সব কম্পিউটারের একটি বিশাল জাল। মজার ব্যাপার হলো, এটি মূলত সমুদ্রের তলদেশ দিয়ে যাওয়া <strong>সাবমেরিন ক্যাবল</strong> এর মাধ্যমে যুক্ত।</p>
+        <div style="text-align: center; font-size: 50px; animation: bounce 2s infinite;">🚢 🌊 🔌 💻</div>
+    </section>
+
+    <section class="card">
+        <h2>🗺️ সাবমেরিন ক্যাবল নেটওয়ার্ক (লাইভ ম্যাপ)</h2>
+        <p>স্টেশনগুলোতে ক্লিক করো এবং দেখো ডেটা কীভাবে সমুদ্রের নিচ দিয়ে ট্রাভেল করে!</p>
+        <div id="map-game">
+            <div class="map-ocean">
+                <div class="wave"></div>
+                <div class="station" onclick="connect('usa')" style="top: 20%; left: 10%;"><span class="flag">🇺🇸</span><span class="label">USA</span></div>
+                <div class="station" onclick="connect('uk')" style="top: 15%; left: 45%;"><span class="flag">🇬🇧</span><span class="label">UK</span></div>
+                <div class="station" onclick="connect('bd')" style="top: 55%; left: 70%;"><span class="flag">🇧🇩</span><span class="label">Bangladesh</span></div>
+                <div class="station" onclick="connect('sg')" style="top: 70%; left: 85%;"><span class="flag">🇸🇬</span><span class="label">Singapore</span></div>
+                <svg class="map-svg"><path id="cable-path" d="" fill="transparent" stroke="yellow" stroke-width="4" stroke-dasharray="10" /></svg>
+            </div>
+            <div id="map-status" class="status-bar">যেকোনো একটি দেশে ক্লিক করো...</div>
+        </div>
+    </section>
+<section class="card" id="timeline-section">
+    <h2>⏳ ইন্টারনেট টাইম ট্রাভেল (বিবর্তন)</h2>
+    <p>নিচের যুগে ক্লিক করো এবং চ্যালেঞ্জটি পূরণ করো!</p>
+    
+    <div class="timeline-container" id="era-container">
+        <div class="progress-wrapper">
+            <div id="era-progress" class="progress-bar"></div>
+        </div>
+
+        <div id="timeline-screen">
+            <div id="content-90s" class="evolution-slide active era-90s">
+                <div class="retro-web">
+                    <p>> DIAL-UP MODE ACTIVE...</p>
+                    <p id="slow-text-output" style="color: #0f0; min-height: 20px;"></p>
+                    <input type="text" id="type-challenge" placeholder="এখানে কিছু লেখো..." oninput="slowType(this)">
+                </div>
+                <p><small>চ্যালেঞ্জ: টাইপ করো আর দেখো কতটা ধীরে লোড হয়!</small></p>
+            </div>
+
+            <div id="content-00s" class="evolution-slide era-00s">
+                <div class="image-load-container">
+                    <div id="image-overlay"></div>
+                    <img src="https://img.icons8.com/color/144/old-personal-computer.png" id="loading-img">
+                </div>
+                <button onclick="revealImage()">ছবি লোড করো</button>
+                <p><small>চ্যালেঞ্জ: ক্লিক করে দেখো কীভাবে লাইন বাই লাইন ছবি লোড হতো!</small></p>
+            </div>
+
+            <div id="content-now" class="evolution-slide era-now">
+                <div class="modern-ai">
+                    <div class="ai-circle"></div>
+                    <h3>AI & 4K Streaming</h3>
+                </div>
+                <button onclick="alert('Modern Ping! 🔔 Instant Access!')">মুভি প্লে করো</button>
+            </div>
+        </div>
+
+        <div class="timeline-controls">
+            <div class="time-point" onclick="travel('90s')">১৯৯০<br><span>📟</span></div>
+            <div class="time-point" onclick="travel('00s')">২০০০<br><span>💻</span></div>
+            <div class="time-point" onclick="travel('now')">এখন<br><span>🚀</span></div>
+        </div>
+    </div>
+</section>
+    <section class="card">
+        <h2>💬 মেসেজ কীভাবে সার্ভারে যায়?</h2>
+        <div class="chat-container">
+            <div class="device shadow">
+                <div class="screen"><div class="chat-header">You</div><div id="my-chat-box" class="msg-box"></div></div>
+                <p>Your Phone</p>
+            </div>
+            <div id="main-server" class="server">
+                <div class="icon">☁️</div>
+                <p>GOOGLE SERVER</p>
+            </div>
+            <div class="device shadow">
+                <div class="screen"><div class="chat-header">Friend</div><div id="friend-chat-box" class="msg-box"></div></div>
+                <p>Friend's Phone</p>
+            </div>
+        </div>
+        <div class="input-area" style="text-align: center;">
+            <input type="text" id="userMsg" class="lab-input" style="width: 200px;" placeholder="মেসেজ লেখো...">
+            <button onclick="simulateChat()">Send 🚀</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>🔗 ল্যাব ১: তোমার নিজের URL বানাও</h2>
+        <input type="text" id="userName" class="lab-input" placeholder="তোমার নাম লেখো..." oninput="generateURL()">
+        <div id="urlResult" class="result-box">https://www.yourname.com</div>
+    </section>
+
+    <section class="card">
+        <h2>🚀 ল্যাব ২: ইন্টারনেট স্পিড টেস্ট</h2>
+        <div class="speed-gauge"><div id="needle" class="needle"></div></div>
+        <div style="text-align: center;">
+            <button onclick="startSpeedTest()">টেস্ট শুরু করো</button>
+            <p id="speedResult" style="font-weight: bold; margin-top: 10px;"></p>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>📦 ল্যাব ৩: ডেটা প্যাকেট সিমুলেশন</h2>
+        <div class="network-track">
+            <div id="packet1" class="packet">📦</div>
+            <div id="packet2" class="packet">📦</div>
+            <div id="packet3" class="packet">📦</div>
+        </div>
+        <button onclick="runSimulation()">Data Send করো</button>
+    </section>
+
+    <section class="card">
+        <h2>🏢 ডোমেইন এক্সটেনশন পরিচিতি</h2>
+        <table class="domain-table">
+            <tr><th>এক্সটেনশন</th><th>ধরণ</th><th>ব্যবহার</th></tr>
+            <tr><td>.com</td><td>Commercial</td><td>ব্যবসা বা সাধারণ সাইট</td></tr>
+            <tr><td>.org</td><td>Organization</td><td>অলাভজনক সংস্থা</td></tr>
+            <tr><td>.gov</td><td>Government</td><td>সরকারি ওয়েবসাইট</td></tr>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>🌓 ইন্টারনেটের প্রভাব (স্লাইডার)</h2>
+        <div class="slider-container">
+            <div id="life-scenario" class="scenario-box no-internet">
+                <h3 id="scenario-text">✉️ ইন্টারনেট ছাড়া: চিঠি পাঠাতে অনেকদিন লাগে</h3>
+            </div>
+            <input type="range" min="0" max="1" step="1" value="0" class="impact-slider" id="impactSlider" oninput="updateScenario()">
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>📖 ইন্টারনেটের ফোনবুক (DNS)</h2>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="resolveDNS('Google.com', '142.250.190.46')">Google</button>
+            <button onclick="resolveDNS('YouTube.com', '208.65.153.238')">YouTube</button>
+            <button onclick="resolveDNS('Facebook.com', '157.240.22.35')">Facebook</button>
+        </div>
+        <div id="dns-display" class="result-box" style="background: #1e293b; color: #5eead4; text-align: center;">বাটনে ক্লিক করো...</div>
+    </section>
+
+    <section class="card" id="quiz-card" style="border: 4px solid var(--secondary);">
+        <h2>🏆 ইন্টারনেটে তুমি কতটা এক্সপার্ট?</h2>
+        <div id="quiz-area">
+            <p id="question" style="font-weight: bold;">১. ইন্টারনেটের বেশির ভাগ তথ্য কিসের ভেতর দিয়ে যায়?</p>
+            <div class="quiz-options">
+                <button onclick="checkAnswer(true)">সাবমেরিন ক্যাবল</button>
+                <button onclick="checkAnswer(false)">স্যাটেলাইট</button>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+    // 1. Map Logic
+    function connect(country) {
+        const path = document.getElementById('cable-path');
+        const status = document.getElementById('map-status');
+        let d = ""; let txt = "";
+        if(country==='bd') { d="M 100 80 Q 300 250 600 200"; txt="বাংলাদেশ সাবমেরিন ক্যাবলে যুক্ত হলো!"; }
+        if(country==='usa') { d="M 80 80 C 200 150 400 50 650 150"; txt="আমেরিকা থেকে ডেটা আসছে!"; }
+        if(country==='sg') { d="M 600 200 L 750 260"; txt="সিঙ্গাপুর হাব কানেক্টেড!"; }
+        path.setAttribute('d', d);
+        path.style.strokeDasharray = "1000"; path.style.strokeDashoffset = "1000";
+        path.animate([{strokeDashoffset: 1000}, {strokeDashoffset: 0}], {duration: 1500, fill:'forwards'});
+        status.innerText = txt;
+    }
+
+   /// সাউন্ড ইফেক্ট তৈরি
+const dialUpSound = new Audio('https://www.soundjay.com/communication/sounds/dial-up-modem-01.mp3');
+const modernPing = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+
+function travel(era) {
+    // সব স্লাইড বন্ধ করা
+    document.querySelectorAll('.evolution-slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('content-' + era).classList.add('active');
+    
+    const pb = document.getElementById('era-progress');
+    
+    if (era === '90s') {
+        dialUpSound.play();
+        pb.style.width = "10%";
+        pb.style.backgroundColor = "brown";
+    } else if (era === '00s') {
+        dialUpSound.pause();
+        pb.style.width = "50%";
+        pb.style.backgroundColor = "blue";
+    } else {
+        dialUpSound.pause();
+        modernPing.play();
+        pb.style.width = "100%";
+        pb.style.backgroundColor = "green";
+    }
+}
+
+// ১৯৯০ চ্যালেঞ্জ: স্লো টাইপিং
+function slowType(input) {
+    const output = document.getElementById('slow-text-output');
+    const val = input.value;
+    setTimeout(() => {
+        output.innerText = val;
+    }, 1500); // ১.৫ সেকেন্ড পর লেখাটি স্ক্রিনে আসবে
+}
+
+// ২০০০ চ্যালেঞ্জ: লাইন বাই লাইন ইমেজ লোড
+function revealImage() {
+    const overlay = document.getElementById('image-overlay');
+    overlay.style.height = "0%"; // কভারটি ধীরে ধীরে নিচে নেমে যাবে
+}
+    // 3. Chat Simulation
+    function simulateChat() {
+        const msg = document.getElementById('userMsg').value;
+        if(!msg) return;
+        const myBox = document.getElementById('my-chat-box');
+        const friendBox = document.getElementById('friend-chat-box');
+        const server = document.getElementById('main-server');
+        
+        const b1 = document.createElement('div'); b1.className='bubble'; b1.innerText=msg;
+        myBox.appendChild(b1); document.getElementById('userMsg').value = "";
+        
+        server.classList.add('processing');
+        setTimeout(() => {
+            server.classList.remove('processing');
+            const b2 = document.createElement('div'); b2.className='bubble'; 
+            b2.style.background='#10b981'; b2.innerText=msg;
+            friendBox.appendChild(b2);
+        }, 2000);
+    }
+
+    // 4. URL & Speed & Packets
+    function generateURL() {
+        const name = document.getElementById('userName').value.toLowerCase().replace(/\s/g, '');
+        document.getElementById('urlResult').innerText = name ? `https://www.${name}.com` : 'https://www.yourname.com';
+    }
+
+    function startSpeedTest() {
+        const needle = document.getElementById('needle');
+        const speed = Math.floor(Math.random() * 100) + 10;
+        needle.style.transform = `rotate(${(speed * 1.8) - 90}deg)`;
+        document.getElementById('speedResult').innerText = "গতি মাপছে...";
+        setTimeout(() => { document.getElementById('speedResult').innerText = `স্পিড: ${speed} Mbps`; }, 2000);
+    }
+
+    function runSimulation() {
+        const packets = [document.getElementById('packet1'), document.getElementById('packet2'), document.getElementById('packet3')];
+        packets.forEach((p, i) => {
+            p.style.display='block'; p.style.left='0';
+            setTimeout(() => { p.animate([{left: '0'}, {left: '90%'}], {duration: 1000, fill:'forwards'}); }, i*300);
+        });
+    }
+
+    // 5. Slider & DNS
+    function updateScenario() {
+        const v = document.getElementById('impactSlider').value;
+        const box = document.getElementById('life-scenario');
+        const txt = document.getElementById('scenario-text');
+        if(v==0) { box.className="scenario-box no-internet"; txt.innerText="✉️ ইন্টারনেট ছাড়া: চিঠি পাঠাতে অনেকদিন লাগে"; }
+        else { box.className="scenario-box with-internet"; txt.innerText="🎥 ইন্টারনেটে: ১ সেকেন্ডে ভিডিও কল!"; }
+    }
+
+    function resolveDNS(d, ip) {
+        document.getElementById('dns-display').innerHTML = `খোঁজা হচ্ছে...`;
+        setTimeout(() => { document.getElementById('dns-display').innerHTML = `🌐 ${d} -> 🔢 ${ip}`; }, 800);
+    }
+
+    // 6. Quiz & Confetti
+    function checkAnswer(correct) {
+        if(correct) {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('quiz-area').innerHTML = "<h2 style='color:var(--success)'>সাবাস! তুমি সঠিক উত্তর দিয়েছ! 🎉</h2>";
+        } else {
+            alert("ভুল উত্তর! আবার চেষ্টা করো। ❌");
+        }
+    }
+</script>
+
+</body>
+</html>
